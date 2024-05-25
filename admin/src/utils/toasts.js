@@ -1,8 +1,8 @@
 icon = {
-    success: '<span class="material-symbols-outlined">task_alt</span>',
-    danger: '<span class="material-symbols-outlined">error</span>',
-    warning: '<span class="material-symbols-outlined">warning</span>',
-    info: '<span class="material-symbols-outlined">info</span>',
+    success:'<img src="src/assets/toasts/success.svg" alt="Success">',
+    danger: '<img src="src/assets/toasts/danger.png" alt="Error">',
+    warning: '<img src="src/assets/toasts/warning.png" alt="Warning">',
+    info: '<img src="src/assets/toasts/info.svg" alt="Info">',
 };
 
 toastConfig = {
@@ -37,9 +37,14 @@ showToast = (message = "Sample Message", toastType = "info", duration = toastCon
 
     container.appendChild(box);
 
-    // Set animation duration for the loader
     box.querySelector(".toast-loader").style.animationDuration = `${duration / 1000}s`;
-
+    
+    box.addEventListener('click', () => {
+        box.remove();
+        if (container.childNodes.length === 0) {
+            container.remove();
+        }
+    });
     setTimeout(() => {
         box.remove();
         if (container.childNodes.length === 0) {

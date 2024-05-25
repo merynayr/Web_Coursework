@@ -1,4 +1,9 @@
 /* toast.css */
+
+:root {
+  --loader-color: #dc3545; /* Красный цвет загрузки по умолчанию */
+}
+
 .toast {
   position: fixed;
   padding: 16px;
@@ -32,24 +37,28 @@
   animation-play-state: paused;
 }
 
-.toast-success {
-  background-color: #d4edda;
+.toast-success { 
+  border-color: #28a745; 
   color: #155724;
+  --loader-color: #28a745; 
 }
 
-.toast-danger {
-  background-color: #f8d7da;
+.toast-danger { 
+  border-color: #dc3545; 
   color: #721c24;
+  --loader-color: #dc3545; 
 }
 
-.toast-warning {
-  background-color: #fff3cd;
+.toast-warning { 
+  border-color: #ffc107; 
   color: #856404;
+  --loader-color: #ffc107; 
 }
 
-.toast-info {
-  background-color: #d1ecf1;
+.toast-info { 
+  border-color: #17a2b8; 
   color: #0c5460;
+  --loader-color: #17a2b8;
 }
 
 .toast-light {
@@ -63,7 +72,7 @@
 .toast-loader {
   height: 4px;
   width: 100%;
-  background-color: #ff0000; /* Цвет загрузки, вы можете изменить его */
+  background-color: var(--loader-color);
   position: absolute;
   bottom: 0;
   left: 0;
