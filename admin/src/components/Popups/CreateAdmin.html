@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Admin</title>
+    <link rel="stylesheet" href="src/components/Popups/CreateAdmin.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script type="module" src="src/components/Popups/CreateAdmin.js" defer></script>
+</head>
+<body>
+    <div class="popup" id="adminPopup">
+        <div class="popup__container">
+            <div class="popup__container__head">
+                <div class="head__title">Добавление админа</div>
+                <div class="head__close" id="popupCloseButton">&times;</div>
+            </div>
+            <div class="popup__container__body">
+                <form id="adminForm">
+                    <label for="fullName">ФИО:</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                    <label for="role">Уровень (роль):</label>
+                    <select id="role" name="role" required>
+                        <option value="Главный администратор">Главный администратор</option>
+                        <option value="Администратор">Администратор</option>
+                    </select>
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" required>
+                    <label for="secretWord">Секретное слово:</label>
+                    <input type="text" id="secretWord" name="secretWord" required>
+                    <button type="submit">Создать</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
