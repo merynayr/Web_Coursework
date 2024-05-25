@@ -22,7 +22,7 @@ $(document).ready(function() {
         e.stopPropagation();
     });
 
-    $("#adminForm").submit(function(e) {
+    $("#adminPopup").submit(function(e) {
         e.preventDefault();
         
         const fullName = $("#fullName").val();
@@ -45,7 +45,7 @@ $(document).ready(function() {
 
 import { isDataFilled } from "../../utils/isDataFilled.js";
 import axios from "axios";
-import { socket } from "../../socket.js"; // Import socket here or define it if it's a global variable
+import { socket } from "../../socket.js"; 
 
 
 async function createAdmin(formData, jwtToken) {
