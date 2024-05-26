@@ -35,7 +35,7 @@ const EditAdminsContent = ({ data, popupHandlerFunc }) => {
             return
         }
 
-        // объединения всех изменений
+        // объединения всех изменений  
         const newAdminData = { ...formData }
 
         // Отправка на сервер измененных данных администратора

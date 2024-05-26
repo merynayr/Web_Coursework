@@ -1,39 +1,26 @@
-import { socket } from '../../socket'; // Подразумевается, что этот файл находится в двух уровнях выше, проверьте путь
-import { motion } from 'framer-motion';
-import './NoItems.css';
+import { socket } from '../../socket';
+import './NoItems.css'
 
-const createNoItemsComponent = ({ title, UpdateButton = true, socketEmitEndpoint = 'isFlightsUpdate' }) => {
-    const container = document.createElement('div');
-    container.className = 'no-items';
+export function renderNoItems(containerSelector, title, socketEmitEndpoint = "isFlightsUpdate", showUpdateButton = true) {
+    const container = $(containerSelector);
+    container.empty(); // Очистим контейнер перед вставкой сообщения
 
-    const innerContainer = document.createElement('div');
-    innerContainer.className = 'no-items__container';
-    container.appendChild(innerContainer);
+    const noItemsHtml = `
+        <div class="no-items">
+            <div class="no-items__container">
+                <div class="title">${title}</div>
+                ${showUpdateButton ? '<button id="updateButton" class="update">Обновить</button>' : ''}
+            </div>
+        </div>
+    `;
 
-    const titleElement = document.createElement('div');
-    titleElement.className = 'title';
-    titleElement.textContent = title;
-    innerContainer.appendChild(titleElement);
+    container.html(noItemsHtml); // Вставим сообщение в указанный контейнер
 
-    if (UpdateButton) {
-        const updateButton = document.createElement('button');
-        updateButton.className = 'update';
-        updateButton.textContent = 'Обновить';
-
-        // Добавление эффектов анимации
-        motion(updateButton, {
-            whileHover: { scale: 1.02 },
-            whileTap: { scale: 0.98 }
+    // Назначаем обработчик события для кнопки обновления
+    if (showUpdateButton) {
+        $('#updateButton').on('click', function() {
+            // Отправляем запрос с текущей строкой поиска
+            socket.emit(socketEmitEndpoint, { search: searchValue });
         });
-
-        updateButton.addEventListener('click', () => {
-            socket.emit(socketEmitEndpoint, { status: true });
-        });
-
-        innerContainer.appendChild(updateButton);
     }
-
-    return container;
-};
-
-export default createNoItemsComponent;
+}

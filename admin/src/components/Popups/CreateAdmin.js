@@ -1,28 +1,13 @@
-function togglePopup() {
-    $(".popup").toggleClass("active");
-}
+// AdminsPage.js
+import { togglePopup, setupPopup } from './Popup.js';
 
-$(document).ready(function() {
-    $("#popupCloseButton").click(function() {
-        togglePopup();
+$(document).ready(function () {
+    setupPopup("#adminPopup", "#popupCloseButton");
+    $("#openPopupButton").click(function () {
+        togglePopup("#adminPopup"); // Открываем модальное окно редактирования
     });
 
-    $(document).keyup(function(e) {
-        if (e.key === "Escape" && $(".popup").hasClass("active")) {
-            togglePopup();
-        }
-    });
-
-    $(".popup").click(function(e) {
-        e.stopPropagation();
-        togglePopup();
-    });
-
-     $(".popup__container").click(function(e) {
-        e.stopPropagation();
-    });
-
-    $("#adminPopup").submit(function(e) {
+    $("#adminPopup").submit(function (e) {
         e.preventDefault();
         
         const fullName = $("#fullName").val();
@@ -40,12 +25,13 @@ $(document).ready(function() {
         };
 
         createAdmin(formData, jwtToken);
+        closePopup("#adminPopup");
     });
 });
 
 import { isDataFilled } from "../../utils/isDataFilled.js";
 import axios from "axios";
-import { socket } from "../../socket.js"; 
+import { socket } from "../../socket.js";
 
 
 async function createAdmin(formData, jwtToken) {
@@ -70,7 +56,7 @@ async function createAdmin(formData, jwtToken) {
             toastError(res.data.error);
         } else {
             toastSuccess("Новый администратор успешно создан!");
-            togglePopup();
+            closePopup("adminPopup");
             socket.emit('isAdminsUpdate', { status: true });
         }
     } catch (error) {

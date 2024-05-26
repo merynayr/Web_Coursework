@@ -1,23 +1,35 @@
-$(document).ready(function() {
-    function togglePopup() {
-        $(".popup").toggleClass("active");
-    }
+// Popup.js
+export function togglePopup(popupSelector) {
+    $(popupSelector).toggleClass("active");
+}
 
-    $("#openPopupButton").click(function() {
-        togglePopup();
-    });
+export function closePopup(popupSelector) {
+    $(popupSelector).removeClass("active");
+}
 
-    $(".popup").click(function() {
-        togglePopup();
-    });
+export function openPopup(popupSelector) {
+    $(popupSelector).addClass("active");
+}
 
-    $(".head__close").click(function(e) {
-        e.stopPropagation();
-        togglePopup();
-    });
+export function setupPopup(popupSelector, closeButtonSelector) {
+    $(document).ready(function() {
+        $(document).keyup(function(e) {
+            if (e.key === "Escape" && $(popupSelector).hasClass("active")) {
+                closePopup(popupSelector);
+            }
+        });
 
-    // Предотвращаем всплытие события при клике на строку ввода
-    $("#adminName").click(function(e) {
-        e.stopPropagation();
+        $(popupSelector).click(function(e) {
+            e.stopPropagation();
+            closePopup(popupSelector);
+        });
+
+        $(closeButtonSelector).click(function() {
+            closePopup(popupSelector);
+        });
+
+        $(".popup__container").click(function(e) {
+            e.stopPropagation();
+        });
     });
-});
+}
