@@ -2,19 +2,19 @@ import { createAdminTableItemCard } from '../../components/TableItemCard/AdminTa
 import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 
-
 $(document).ready(function() {
     let admins = [];
     let unChangedAdmins = [];
     let isFetching = false;
 
-    $("#createAdminContainer").load("src/components/Popups/CreateAdmin.html");
-    $("#editAdminContainer").load("src/components/Popups/EditItem.html");
+    $("#createContainer").load("src/components/Popups/CreateAdmin.html");
+    $("#editContainer").load("src/components/Popups/EditItem.html");
+    $("#removeContainer").load("src/components/Popups/RemoveItem.html");
 
     // Функция для рендеринга администраторов
     const renderAdmins = (adminData) => {
         const container = $('#admin-table-container');
-        container.empty();
+        // container.empty();
 
         if (adminData.length) {
             adminData.forEach(admin => {
@@ -22,7 +22,6 @@ $(document).ready(function() {
                 container.append(card);
             });
         } else {
-            // container.html('<div class="no-items"><div class="no-items__container"><div class="title" id="noItemsTitle"></div><button id="updateButton" class="update">Обновить</button></div></div>');
             renderNoItems('#admin-table-container', 'Админов не найдено 😔', 'adminsDataGet', true);
         }
     };
@@ -56,4 +55,5 @@ $(document).ready(function() {
     socket.on('adminsUpdate', () => {
         socket.emit('adminsDataGet');
     });
+    
 });

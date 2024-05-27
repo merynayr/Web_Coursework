@@ -1,8 +1,8 @@
 // AdminsPage.js
-import { togglePopup, setupPopup } from './Popup.js';
+import { togglePopup, setupPopup, closePopup} from './Popup.js';
 
 $(document).ready(function () {
-    setupPopup("#adminPopup", "#popupCloseButton");
+    setupPopup("#adminPopup", "#popupCloseButtonCreate");
     $("#openPopupButton").click(function () {
         togglePopup("#adminPopup"); // Открываем модальное окно редактирования
     });

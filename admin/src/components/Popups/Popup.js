@@ -5,6 +5,7 @@ export function togglePopup(popupSelector) {
 
 export function closePopup(popupSelector) {
     $(popupSelector).removeClass("active");
+    clearInputFields(popupSelector); 
 }
 
 export function openPopup(popupSelector) {
@@ -25,6 +26,7 @@ export function setupPopup(popupSelector, closeButtonSelector) {
         });
 
         $(closeButtonSelector).click(function() {
+            console.log(popupSelector);
             closePopup(popupSelector);
         });
 
@@ -32,4 +34,10 @@ export function setupPopup(popupSelector, closeButtonSelector) {
             e.stopPropagation();
         });
     });
+}
+
+
+function clearInputFields(popupSelector) {
+    $(popupSelector).find('input[type="text1"]').val('');
+    $(popupSelector).find('input[type="password"]').val('');
 }

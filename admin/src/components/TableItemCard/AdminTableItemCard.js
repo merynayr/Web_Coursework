@@ -25,7 +25,11 @@ export function createAdminTableItemCard(adminData) {
             loadEditContent('admins', adminData); // Загружаем контент редактирования
             togglePopup("#editItemPopup"); // Открываем модальное окно редактирования
         },
-        onRemove: () => alert('Remove clicked for ' + adminData.fullName),
+        onRemove: () => {
+            $('#removeItemPopup').data("adminId", adminData.id); // Устанавливаем adminId
+            $('#removeItemPopup').data("itemCategory", "admins"); // Устанавливаем категорию элемента
+            togglePopup("#removeItemPopup"); // Открываем модальное окно удаления
+        },
     });
 
     return card;

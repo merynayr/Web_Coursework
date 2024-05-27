@@ -1,120 +1,57 @@
-import { toastSuccess, toastError } from '../../utils/toasts';
-import { socket } from '../../socket.js';
+import { togglePopup, setupPopup, closePopup } from './Popup.js';
 import axios from 'axios';
-import closeButton from "../../assets/popup/close.svg";
+import { itemCategories } from '../../api/itemCategoriesApi.js'
+import { socket } from "../../socket.js";
+import getSocketPathByItemCategory from '../../utils/getSocketPathByItemCategory'
 
-const RemoveItem = ({ title, popupHandlerFunc, itemId, itemCategory }) => {
-    const closePopupHandler = () => {
-        popupHandlerFunc(prev => !prev);
-    };
 
-    const socketPath = itemCategory; // Предположим, что itemCategory - это уже путь сокета, не требующий дополнительной обработки
-    const jwtToken = localStorage.getItem('token');
 
-    const removeItem = async () => {
+$(document).ready(function () {
+    setupPopup("#removeItemPopup", "#popupCloseButtonRemove");
+    $("#cancelButton").click(function () {
+        closePopup("#removeItemPopup"); 
+    });
+
+    $("#popupCloseButton").click(function () {
+        closePopup("#removeItemPopup"); 
+    });
+
+    $("#removeButton").click(async function () {
+        const itemId = $("#removeItemPopup").data("Id");
+        const itemCategory = $("#removeItemPopup").data("itemCategory"); // Получаем категорию элемента
+        removeItem(itemId, itemCategory); // Вызываем функцию удаления с передачей категории элемента
+    });
+    window.togglePopup = togglePopup;
+
+    const removeItem = async (itemId, itemCategory) => {
+        const socketPath = getSocketPathByItemCategory(itemCategory)
+        const jwtToken = localStorage.getItem('token');
+
         try {
-            const res = await axios.delete(`${itemCategory}/${itemId}`, {
+            const response = await axios.delete(`${itemCategories[itemCategory]}/${itemId}`, {
                 headers: {
-                    token: `Bearer ${jwtToken}`
+                    Authorization: `Bearer ${jwtToken}`
                 }
             });
 
-            if (res.data.error) {
-                toastError(res.data.error);
+            if (response.data.error) {
+                toastError(response.data.error);
 
-                if (res.data.error.isRemoveAdminData !== undefined) {
+                if (response.data.error.isRemoveAdminData !== undefined) {
                     localStorage.setItem('fullName', '');
                     localStorage.setItem('token', '');
                     localStorage.setItem('admin-type', '');
                 }
-
-                closePopupHandler();
-                return;
+            } else {
+                toastSuccess("Успешное удаление!")
+                socket.emit(socketPath, { status: true })
+                togglePopup("#removeItemPopup"); 
             }
-
-            toastSuccess("Успешное удаление!");
-            socket.emit(socketPath, { status: true });
-            closePopupHandler();
-        } catch (err) {
+        } catch (error) {
             toastError("Что-то пошло не так, попробуйте позже");
-            console.error(err);
-            closePopupHandler();
+            console.error(error);
+        } finally {
+            closePopup("#removeItemPopup"); 
         }
     };
-
-    const popupHandler = () => {
-        popupHandlerFunc(prev => !prev);
-    };
-
-    const popupContainer = document.createElement('div');
-    popupContainer.classList.add('popup');
-
-    const popupContent = document.createElement('div');
-    popupContent.classList.add('popup__container');
-
-    popupContent.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-
-    const popupHead = document.createElement('div');
-    popupHead.classList.add('popup__container__head');
-
-    const headTitle = document.createElement('div');
-    headTitle.classList.add('head__title');
-    headTitle.textContent = title;
-
-    const headClose = document.createElement('div');
-    headClose.classList.add('head__close');
-    headClose.addEventListener('click', popupHandler);
-
-    const closeImage = document.createElement('img');
-    closeImage.src = closeButton;
-    closeImage.alt = 'close';
-
-    headClose.appendChild(closeImage);
-
-    popupHead.appendChild(headTitle);
-    popupHead.appendChild(headClose);
-
-    const popupBody = document.createElement('div');
-    popupBody.classList.add('popup__container__body');
-
-    const removeItemContent = document.createElement('div');
-    removeItemContent.classList.add('remove-item');
-
-    const removeItemInfo = document.createElement('div');
-    removeItemInfo.classList.add('remove-item__info');
-    removeItemInfo.textContent = "Вы действительно хотите это удалить?";
-
-    const removeItemButtons = document.createElement('div');
-    removeItemButtons.classList.add('remove-item__buttons');
-
-    const cancelButton = document.createElement('button');
-    cancelButton.classList.add('button', 'cancel');
-    cancelButton.textContent = 'Отмена';
-    cancelButton.addEventListener('click', closePopupHandler);
-
-    const removeButton = document.createElement('button');
-    removeButton.classList.add('button', 'remove');
-    removeButton.textContent = 'Удалить';
-    removeButton.addEventListener('click', removeItem);
-
-    removeItemButtons.appendChild(cancelButton);
-    removeItemButtons.appendChild(removeButton);
-
-    removeItemContent.appendChild(removeItemInfo);
-    removeItemContent.appendChild(removeItemButtons);
-
-    popupBody.appendChild(removeItemContent);
-
-    popupContent.appendChild(popupHead);
-    popupContent.appendChild(popupBody);
-
-    popupContainer.appendChild(popupContent);
-
-    popupContainer.addEventListener('click', popupHandler);
-
-    return popupContainer;
-};
-
-export default RemoveItem;
+});
