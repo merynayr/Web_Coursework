@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Item</title>
+    <link rel="stylesheet" href="src/components/Popups/Popup.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <link rel="stylesheet" href="../src/utils/toasts.css">
+    <script src="../src/utils/toasts.js" defer></script>
+    <script src="src/utils/dynamicImport.js"></script> 
+    <script defer>loadModule('src/components/Popups/RemoveItem.js');</script>
+</head>
+<div id="removeItemPopup" class="popup">
+    <div class="popup__container">
+        <div class="popup__container__head">
+            <div class="head__title" id="popupTitle">Удаление</div>
+            <div class="head__close" id="popupCloseButtonRemove">&times;</div>
+        </div>
+        <div class="popup__body">
+            <div class="remove-item">
+                <div class="remove-item__info">Вы действительно хотите это удалить?</div>
+                <div class="remove-item__buttons">
+                    <button id="cancelButton" class="button cancel">Отмена</button>
+                    <button id="removeButton" class="button remove">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

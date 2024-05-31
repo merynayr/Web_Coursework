@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admins Page</title>
+    <link rel="stylesheet" href="src/pages/AdminsPage/AdminsPage.css">
+    <link rel="stylesheet" href="../src/utils/toasts.css">
+    <script src="../src/utils/toasts.js" defer></script>
+    <script type="module" src="../src/api/index.js" defer></script>
+    <script type="module" src="../src/socket.js" defer></script>
+    <script type="module" src="src/components/TableItemCard/AdminTableItemCard.js" defer></script>
+    <link rel="stylesheet" href="src/components/TableItemCard/TableItemCard.css">
+    <script src="src/utils/dynamicImport.js"></script> 
+    <script defer>loadModule('src/pages/AdminsPage/AdminsPage.js');</script>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="dashboard__container">
+            <div class="dashboard__container__header">
+                <div class="header__title">
+                    <div class="title">Администраторы</div>
+                </div>
+                <div class="search" style="width: 50%;">
+                    <div class="search__input">
+                        <img src="src/assets/search.svg">
+                        <input type="text" id="searchInput" placeholder="Поиск администраторов" autocomplete="off">
+                        <span class="keybind"><kbd>enter</kbd> <span>или</span> <kbd>+</kbd></span>
+                    </div>
+                </div>
+                <button class="create-new-button" style="width: 25%;" id="openPopupButton">Добавить
+                    администратора</button>
+            </div>
+            <div class="dashboard__container__body" id="admin-table-container">
+                <!-- TODO: list of admins -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Включаем CreateAdmin -->
+    <div id="editContainer"></div>
+    <div id="removeContainer"></div>
+    <div id="createContainer"></div>
+
+</body>
+
+</html>
