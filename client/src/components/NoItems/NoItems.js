@@ -20,7 +20,7 @@ export function renderNoItems(containerSelector, title, socketEmitEndpoint = "is
     if (showUpdateButton) {
         $('#updateButton').on('click', function() {
             // Отправляем запрос с текущей строкой поиска
-            socket.emit(socketEmitEndpoint, { search: searchValue });
+            socket.emit(socketEmitEndpoint, { search: searchInput });
         });
     }
 }

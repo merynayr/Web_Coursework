@@ -1,75 +1,101 @@
 <link rel="stylesheet" href="src/layout/Sidebar.css">
 <div class="sidebar__logo">
     URTK Airport Panel
-  </div>
-  <a href="/register-passenger" class="nav-link sidebar__link" data-link>
-    <img src="/src/assets/sidebar/new_passenger.svg" alt="Регистрация пассажира на рейс">
-    <div class="title">
-      <div class="title__main">Регистрация пассажира</div>
-      <div class="title__sub">Добавление пассажиров на рейс</div>
-    </div>
-  </a>
-  <a href="/passengers" class="nav-link sidebar__link" data-link>
-    <img src="/src/assets/sidebar/passenger.svg" alt="Управление пассажирами">
-    <div class="title">
-      <div class="title__main">Управление пассажирами</div>
-      <div class="title__sub">Редактирование пассажиров</div>
-    </div>
-  </a>
-  <a href="/flights" class="nav-link sidebar__link" data-link>
-    <img src="/src/assets/sidebar/flight.svg" alt="Управление рейсами">
-    <div class="title">
-      <div class="title__main">Рейсы</div>
-      <div class="title__sub">Создание рейсов</div>
-    </div>
-  </a>
-  <a href="/planes" class="nav-link sidebar__link" data-link>
-    <img src="/src/assets/sidebar/plane.svg" alt="Управление самолетами">
-    <div class="title">
-      <div class="title__main">Самолеты</div>
-      <div class="title__sub">Создание самолетов</div>
-    </div>
-  </a>
-  <a href="/airports" class="nav-link sidebar__link" data-link>
-    <img src="/src/assets/sidebar/airport.svg" alt="Управление аэропортами">
-    <div class="title">
-      <div class="title__main">Аэропорты</div>
-      <div class="title__sub">Создание аэропортов</div>
-    </div>
-  </a>
-  <div id="additional-menu"></div>
-  <div class="sidebar__admin">
+</div>
+<div class="sidebar__link-wrapper mainAdmin-only">
+    <a href="/admins" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/admin.svg" alt="Управление администраторами">
+        <div class="title">
+            <div class="title__main">Администраторы</div>
+            <div class="title__sub">Добавление администраторов</div>
+        </div>
+    </a>
+</div>
+<div class="sidebar__link-wrapper subAdmin-only">
+    <a href="/passengers" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/passenger.svg" alt="Управление пассажирами">
+        <div class="title">
+            <div class="title__main">Управление пассажирами</div>
+            <div class="title__sub">Редактирование пассажиров</div>
+        </div>
+    </a>
+</div>
+<div class="sidebar__link-wrapper subAdmin-only">
+    <a href="/flights" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/flight.svg" alt="Управление рейсами">
+        <div class="title">
+            <div class="title__main">Рейсы</div>
+            <div class="title__sub">Создание рейсов</div>
+        </div>
+    </a>
+</div>
+<div class="sidebar__link-wrapper subAdmin-only">
+    <a href="/planes" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/plane.svg" alt="Управление самолетами">
+        <div class="title">
+            <div class="title__main">Самолеты</div>
+            <div class="title__sub">Создание самолетов</div>
+        </div>
+    </a>
+</div>
+<div class="sidebar__link-wrapper subAdmin-only">
+    <a href="/airports" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/airport.svg" alt="Управление аэропортами">
+        <div class="title">
+            <div class="title__main">Аэропорты</div>
+            <div class="title__sub">Создание аэропортов</div>
+        </div>
+    </a>
+</div>
+<div class="sidebar__link-wrapper public-only">
+    <a href="/register-passenger" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/new_passenger.svg" alt="Регистрация пассажира на рейс">
+        <div class="title">
+            <div class="title__main">Регистрация пассажира</div>
+            <div class="title__sub">Добавление пассажиров на рейс</div>
+        </div>
+    </a>
+</div>
+<div class="sidebar__link-wrapper public-only">
+    <a href="/flights" class="nav-link sidebar__link" data-link>
+        <img src="/src/assets/sidebar/flight.svg" alt="Управление рейсами">
+        <div class="title">
+            <div class="title__main">Рейсы</div>
+            <div class="title__sub">Создание рейсов</div>
+        </div>
+    </a>
+</div>
+<div id="additional-menu"></div>
+<div class="sidebar__admin">
     <div class="sidebar__admin__info" id="admin-info"></div>
     <div class="sidebar__admin__quit">
-      <img class="quit" src="/src/assets/sidebar/exit.svg" alt="Выйти из аккаунта" />
+        <img class="quit" src="/src/assets/sidebar/exit.svg" alt="Выйти из аккаунта" />
     </div>
-  </div>
-  
-  <script>
+</div>
+
+<script>
     const adminInfo = document.getElementById('admin-info');
-    const role = localStorage.getItem('admin-type') === 'mainAdmin' ? 'Главный администратор' : 'Администратор';
+    const role = localStorage.getItem('admin-type');
     const fullname = localStorage.getItem('fullName');
     adminInfo.innerHTML = `
-        <div class="role">${role}</div>
+        <div class="role">${role === 'mainAdmin' ? 'Главный администратор' : 'Администратор'}</div>
         <div class="fullname">${fullname}</div>
     `;
-  
+
     document.querySelector('.sidebar__admin__quit').addEventListener('click', function () {
         localStorage.clear();
         window.location.href = '/auth';
     });
-  
-    // Проверяем роль админа и добавляем дополнительное меню, если это главный администратор
-    if (localStorage.getItem('admin-type') === 'mainAdmin') {
-        document.getElementById('additional-menu').innerHTML = `
-            <a href="/admins" class="nav-link sidebar__link" data-link>
-                <img src="/src/assets/sidebar/admin.svg" alt="Управление администраторами">
-                <div class="title">
-                    <div class="title__main">Администраторы</div>
-                    <div class="title__sub">Добавление администраторов</div>
-                </div>
-            </a>
-        `;
+
+    // Управление видимостью элементов боковой панели на основе роли пользователя
+    const allLinks = document.querySelectorAll('.sidebar__link-wrapper');
+    allLinks.forEach(link => link.style.display = 'none');
+
+    if (role === 'mainAdmin') {
+        document.querySelectorAll('.mainAdmin-only').forEach(link => link.style.display = 'block');
+    } else if (role === 'subAdmin') {
+        document.querySelectorAll('.subAdmin-only').forEach(link => link.style.display = 'block');
+    } else {
+        document.querySelectorAll('.public-only').forEach(link => link.style.display = 'block');
     }
-  </script>
-  
+</script>

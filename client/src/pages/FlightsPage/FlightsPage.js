@@ -38,7 +38,6 @@ $(document).ready(function() {
             flight.flightTime.toString().includes(searchValue) ||
             flight.date.toString().includes(searchValue)
         );
-        console.log(filteredFlights);
         renderFlights(filteredFlights);
 
         if (searchValue === '') {

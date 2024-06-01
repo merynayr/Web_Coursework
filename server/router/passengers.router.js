@@ -18,9 +18,9 @@ passengerRouter.get('/', async (req, res) => {
             return res.send({ message: "There is no passengers" })
         }
 
-        return res.send({ 
-            message: "Found some passengers", 
-            body: allPassengers 
+        return res.send({
+            message: "Found some passengers",
+            body: allPassengers
         })
     } catch (e) {
         console.log(error("Some Internal Error", e))
@@ -32,10 +32,9 @@ passengerRouter.get('/', async (req, res) => {
 passengerRouter.post('/create', async (req, res) => {
     try {
         const { passportSeries, passportNumber } = req.body
-        
-        const passportData = `${passportSeries} ${passportNumber}`
 
-        const isNewPassenger =  await Passenger.findOne({ passport: passportData})
+        const passportData = `${passportSeries} ${passportNumber}`
+        const isNewPassenger = await Passenger.findOne({ passport: passportData })
 
         if (isNewPassenger != null) {
             return res.send({ error: "Это уже зарегистрированный пассажир" })
@@ -46,46 +45,45 @@ passengerRouter.post('/create', async (req, res) => {
 
         // change free and busy places in the plane
         const busySeatCount = currentPlane.busySeatCount;
-        const freeSeatCount = currentPlane.freeSeatCount;   
+        const freeSeatCount = currentPlane.freeSeatCount;
 
         for (let i = 0; i < currentPlane.seatPlaces.length; i++) {
-            if (currentPlane.seatPlaces[i].seatName == req.body.seatNumber) {
+            if (currentPlane.seatPlaces[i].seatName == req.body.flightInfo.seatNumber) {
                 currentPlane.seatPlaces[i].status = 'busy'
             }
         }
 
-        await Plane.findOneAndUpdate({ id: currentFlight.flightPlane }, { 
-            busySeatCount: busySeatCount + 1, 
+        await Plane.findOneAndUpdate({ id: currentFlight.flightPlane }, {
+            busySeatCount: busySeatCount + 1,
             freeSeatCount: freeSeatCount - 1,
-            seatPlaces: [ ...currentPlane.seatPlaces ]
+            seatPlaces: [...currentPlane.seatPlaces]
         })
 
 
         // creating new passenger
-        const passenger = new Passenger({ 
+        const passenger = new Passenger({
             id: uuidv4(),
             passport: passportData,
             ...req.body,
             ...req.body.flightInfo
-        }) 
-
+        })
         await passenger.save()
-        .then(() => {
-            return res.send({ message: "New user has been successfully created" })
-        })
-        .catch(err => {
-            return res.send({ error: "New user hasn't been successfully created" })
-        })
+            .then(() => {
+                return res.send({ message: "New user has been successfully created" })
+            })
+            .catch(err => {
+                return res.send({ error: "New user hasn't been successfully created" })
+            })
     } catch (e) {
         console.error(error("Some Internal Error", e))
-        return res.send({ error: "Some Internal Error", status: 500})
+        return res.send({ error: "Some Internal Error", status: 500 })
     }
 })
 
 // [PUT] http://localhost:5000/api/passengers/change
 passengerRouter.put('/change', async (req, res) => {
     try {
-        const { id, fullName } = req.body  
+        const { id, fullName } = req.body
 
         // change data about passenger
         const existsPassenger = await Passenger.findOneAndUpdate({ id }, {
@@ -99,8 +97,8 @@ passengerRouter.put('/change', async (req, res) => {
         return res.send({ message: "The user data successfully changed" })
     } catch (e) {
         console.error(error("Some Internal Error", e))
-        return res.send({ error: "Some Internal Error", status: 500})
-    }  
+        return res.send({ error: "Some Internal Error", status: 500 })
+    }
 })
 
 // [DELETE] http://localhost:5000/api/passengers/remove
@@ -108,6 +106,38 @@ passengerRouter.delete('/remove/:id', async (req, res) => {
     try {
         const passenegerId = req.params.id
 
+        // Находим пассажира
+        const passenger = await Passenger.findOne({ id: passenegerId });
+
+        if (!passenger) {
+            return res.send({ error: "Passenger not found" });
+        }
+
+        // Находим рейс, на котором летел пассажир
+        const flight = await Flight.findOne({ flightNumber: passenger.flightNumber });
+
+        if (!flight) {
+            return res.send({ error: "Flight not found" });
+        }
+
+        // Находим самолет, на котором проходил рейс
+        const plane = await Plane.findOne({ id: flight.flightPlane });
+
+        if (!plane) {
+            return res.send({ error: "Plane not found" });
+        }
+
+        const seatNumber = passenger.seatNumber;
+        const seatIndex = plane.seatPlaces.findIndex(seat => seat.seatName === seatNumber);
+
+        if (seatIndex !== -1) {
+            plane.seatPlaces[seatIndex].status = 'free';
+            plane.busySeatCount--;
+            plane.freeSeatCount++;
+            await plane.save();
+        } else {
+            return res.send({ error: "Seat not found in plane" });
+        }
         // remove the passenger
         const removePassenger = await Passenger.findOneAndRemove({ id: passenegerId })
 
@@ -115,7 +145,8 @@ passengerRouter.delete('/remove/:id', async (req, res) => {
             return res.send({ error: "Something gone wrong, passenger hasn't removed" })
         }
 
-        return res.send({ message: "passenger successfully removed" })  
+
+        return res.send({ message: "passenger successfully removed" })
     } catch (e) {
         console.error("Some Internal Error", e)
         return res.send({ error: "Some Internal Error", status: 500 })

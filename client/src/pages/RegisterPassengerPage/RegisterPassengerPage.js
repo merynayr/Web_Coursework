@@ -2,12 +2,13 @@ import { createRegisterPassengerFlightsCard } from '../../components/TableItemCa
 import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 import { calculateLastCallTime } from '../../utils/calculateLastCallTime.js'
+import axios from 'axios';
 
 $(document).ready(function () {
     let formData = {};
     let flights = [];
     let unChangedFlights = [];
-    let validSeatSelected = false; // Flag to check if a valid seat is selected
+    let validSeatSelected = false;
     const container = $('#flightCardsContainer');
 
     // Function to switch between steps
@@ -25,24 +26,30 @@ $(document).ready(function () {
         const currentStep = $(this).closest('.step');
         const nextStep = currentStep.next('.step');
 
-        // Prevent moving to step 4 if no valid seat is selected
-        if (nextStep.is('#step4') && !validSeatSelected) {
-            toastWarning("Выберите свободное место перед продолжением");
-            return;
-        }
+        if (nextStep.is('#step2')) {
+            formData.fullName = $('#fullName').val();
+            formData.passportSeries = $('#passportSeries').val();
+            formData.passportNumber = $('#passportNumber').val();
 
-        if (nextStep.length) {
-            currentStep.hide();
-            nextStep.show();
+            if (validateStep1(formData)) {
+                switchStep(2);
+            } else {
+                toastError("Корректно введите данные");
+            }
         }
 
         if (nextStep.is('#step3')) {
-            const currentFlightNumber = formData.flightNumber;
-            switchStep(3, formData, formData.planeSeatPlaces);
+            console.log(formData);
+            switchStep(3, formData.flightInfo, formData.flightInfo.planeSeatPlaces);
         }
 
         if (nextStep.is('#step4')) {
-            updateBoardingPassInfo();
+            if (validSeatSelected) {
+                switchStep(4);
+                updateBoardingPassInfo();
+            } else {
+                toastWarning("Выберите свободное место перед продолжением");
+            }
         }
     });
 
@@ -55,15 +62,9 @@ $(document).ready(function () {
         }
     });
 
-    $('#passengerDataForm').submit(function (event) {
-        event.preventDefault();
-        formData.fullName = $('#fullName').val();
-        formData.passportSeries = $('#passportSeries').val();
-        formData.passportNumber = $('#passportNumber').val();
-    });
 
-    const handleCardClick = (data) => {
-        formData = data;
+    const handleCardClick = (flightInfo) => {
+        formData = { ...formData, flightInfo };
     };
 
     const renderFlights = (flightData) => {
@@ -134,8 +135,9 @@ $(document).ready(function () {
 
     const addPassengerPlace = (place) => {
         if (place.status === 'free') {
-            formData.selectedSeat = place.seatName;
+            formData.flightInfo.seatNumber = place.seatName;
             validSeatSelected = true;
+            toastInfo(`Выбрано место: ${place.seatName}`);
         } else {
             validSeatSelected = false;
             toastWarning("Это место занято");
@@ -144,18 +146,52 @@ $(document).ready(function () {
 
 
     const updateBoardingPassInfo = () => {
-        $('#gateInfo').text(formData.gate);
-        $('#boardingInfo').text(`${formData.date} | ${formData.flightTime}`);
-        $('#lastCallInfo').text(`${formData.date} | ${calculateLastCallTime(formData.flightTime)}`);
+        $('#gateInfo').text(formData.flightInfo.gate);
+        $('#boardingInfo').text(`${formData.flightInfo.date} | ${formData.flightInfo.flightTime}`);
+        $('#lastCallInfo').text(`${formData.flightInfo.date} | ${calculateLastCallTime(formData.flightInfo.flightTime)}`);
         $('#passengerInfo').text(formData.fullName);
-        $('#departureInfo').text(formData.departureAirport);
-        $('#seatInfo').text(formData.selectedSeat);
-        $('#priceInfo').text(`${formData.flightPrice}₽`);
-        $('#arrivalInfo').text(formData.destinationAirport);
-        $('#flightNumberInfo').text(formData.flightNumber);
+        $('#departureInfo').text(formData.flightInfo.departureAirport);
+        $('#seatInfo').text(formData.flightInfo.seatNumber);
+        $('#priceInfo').text(`${formData.flightInfo.flightPrice}₽`);
+        $('#arrivalInfo').text(formData.flightInfo.destinationAirport);
+        $('#flightNumberInfo').text(formData.flightInfo.flightNumber);
     };
 
-    $('#printTicket').click(function () {
-        window.print();
+    $('#printTicket').click(async function () {
+
+        await axios.post(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.CREATE}`, formData)
+            .then(res => {
+                if (res.data.error) {
+                    toastError("Данный пассажир уже существует")
+                    return
+                }
+                toastSuccess("Новый пассажир успешно создан")
+
+                // print the ticket
+                window.print();
+                if (window.location === '/register-passenger') {
+                    setTimeout(() => {
+                        window.location = '/register-passenger'
+                    }, 5000)
+                } else {
+                    setTimeout(() => {
+                        window.location = '/passenger'
+                    }, 3000)
+                }
+            })
+            .catch(err => {
+                if (err.body.error) {
+                    toastError("Что-то пошло не так, попробуйте позже")
+                }
+            })
+
+
     });
+
+    function validateStep1(data) {
+        const fullNameValid = data.fullName && data.fullName.trim().length > 0;
+        const passportSeriesValid = data.passportSeries && data.passportSeries.trim().length === 4;
+        const passportNumberValid = data.passportNumber && data.passportNumber.trim().length === 6;
+        return fullNameValid && passportSeriesValid && passportNumberValid;
+    }
 });

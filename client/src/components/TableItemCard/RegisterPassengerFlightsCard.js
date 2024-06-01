@@ -33,6 +33,7 @@ export function createRegisterPassengerFlightsCard(props, onCardClick) {
             axios.get(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PLANES.ROUTE}${endpoints.PLANES.PLANE}/${currentFlightNumber}`)
             .then(res => {
                 setFormData = { ...setFormData, planeSeatPlaces: [...res.data.body] };
+                console.log(setFormData);
                 onCardClick(setFormData); // Передача данных через callback
             })
             .catch(err => {
