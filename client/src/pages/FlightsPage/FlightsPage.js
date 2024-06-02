@@ -2,10 +2,17 @@ import { createFlightTableItemCard } from '../../components/TableItemCard/Flight
 import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 
-$(document).ready(function() {
+$(document).ready(function () {
     let flights = [];
     let unChangedFlights = [];
     let isFetching = false;
+
+    const allLinks = document.querySelectorAll('.create-new-button');
+    allLinks.forEach(link => link.style.display = 'block');
+
+    if (role !== 'subAdmin') {
+        document.querySelectorAll('.public').forEach(link => link.style.visibility = 'hidden');
+    }
 
     $("#createContainer").load("src/components/Popups/CreateFlight.html");
     $("#editContainer").load("src/components/Popups/EditItem.html");
@@ -27,9 +34,9 @@ $(document).ready(function() {
     };
 
     // Обработчик поиска
-    $('#searchInput').on('input', function(e) {
+    $('#searchInput').on('input', function (e) {
         const searchValue = e.target.value.toLowerCase();
-        const filteredFlights = unChangedFlights.filter(flight => 
+        const filteredFlights = unChangedFlights.filter(flight =>
             flight.flightNumber.toLowerCase().includes(searchValue) ||
             flight.departureAirport.toLowerCase().includes(searchValue) ||
             flight.destinationAirport.toLowerCase().includes(searchValue) ||

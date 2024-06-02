@@ -57,6 +57,7 @@ async function createAdmin(formData, jwtToken) {
         } else {
             toastSuccess("Новый администратор успешно создан!");
             closePopup("adminPopup");
+            route.navigate('/admins');
             socket.emit('isAdminsUpdate', { status: true });
         }
     } catch (error) {

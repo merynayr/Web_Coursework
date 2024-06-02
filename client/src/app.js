@@ -24,11 +24,11 @@ function loadSidebar() {
                 <div class="role">${roleDisplay}</div>
                 <div class="fullname">${fullname !== null ? fullname : ''}</div>
             `;
-        
+
             // Управление видимостью элементов боковой панели на основе роли пользователя
             const allLinks = document.querySelectorAll('.sidebar__link-wrapper');
             allLinks.forEach(link => link.style.display = 'none');
-        
+
             if (role === 'mainAdmin') {
                 document.querySelectorAll('.mainAdmin-only').forEach(link => link.style.display = 'block');
             } else if (role === 'subAdmin') {
@@ -47,7 +47,7 @@ $(document).ready(function () {
     loadSidebar();
 
     const publicPaths = ['/register-passenger', '/flights', '/auth'];
-    
+
     // Проверка авторизации при первом открытии
     const isAuthorized = !!localStorage.getItem('token') &&
         !!localStorage.getItem('fullName') &&
@@ -57,23 +57,21 @@ $(document).ready(function () {
     const role = localStorage.getItem('admin-type');
 
     if (isAuthorized) {
-        if (currentPath === '/' || currentPath === '/auth') {
-            router.navigate('/register-passenger');
-        } else if (role === 'mainAdmin' && currentPath !== '/admins') {
+        if (role === 'mainAdmin' && currentPath !== '/admins') {
             router.navigate('/admins');
         } else if (role === 'subAdmin' && !['/register-passenger', '/passengers', '/flights', '/planes', '/airports'].includes(currentPath)) {
             router.navigate('/passengers');
         }
     } else {
         if (!publicPaths.includes(currentPath)) {
-            router.navigate('/auth');
+            router.navigate('/flights');
         }
     }
 
     router.init();
 
     // Обработчик событий для элементов .nav-link
-    $('body').on('click', '.nav-link', function(event) {
+    $('body').on('click', '.nav-link', function (event) {
         event.preventDefault();
         const path = $(this).attr('href');
         router.navigate(path);
