@@ -1,10 +1,10 @@
 
 const socketPaths = {
-    'flights': 'isFlightsUpdate',
+    'flights': '/flights',
     'planes': 'isPlanesUpdate',
     'airports': 'isAirportsUpdate',
-    'admins': 'isAdminsUpdate',
-    'passengers': 'isPassengersUpdate' 
+    'admins': '/admins',
+    'passengers': '/passengers' 
 }
 
 const getSocketPathByItemCategory = (itemCategory) => {
