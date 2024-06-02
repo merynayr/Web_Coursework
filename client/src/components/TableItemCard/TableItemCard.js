@@ -1,3 +1,5 @@
+import '../../components/TableItemCard/TableItemCard.css';
+
 // TableItemCard.js
 export function createTableItemCard({ children, onEdit, onRemove }) {
     const isAuthorized = !!localStorage.getItem('token') &&
