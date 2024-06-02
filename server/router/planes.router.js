@@ -51,8 +51,7 @@ planeRouter.get('/plane/:flightNumber', async (req, res) => {
         if (!currentFlight) {
             return res.send({ message: "Рейса с таким номером не существует" })
         }
-
-        const currentPlane = await Plane.findOne({ planeType: currentFlight.flightPlaneType })
+        const currentPlane = await Plane.findOne({ id: currentFlight.flightPlane })
 
         return res.send({ body: currentPlane?.seatPlaces })
     } catch (e) {

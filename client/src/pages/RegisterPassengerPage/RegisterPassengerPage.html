@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Registration</title>
+    <link rel="stylesheet" href="src/pages/RegisterPassengerPage/RegisterPassengerPage.css">
+    <link rel="stylesheet" href="../src/utils/toasts.css">
+    <link rel="stylesheet" href="src/components/TableItemCard/TableItemCard.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../src/utils/toasts.js" defer></script>
+    <script src="src/utils/dynamicImport.js"></script> 
+    <script defer>loadModule('src/pages/RegisterPassengerPage/RegisterPassengerPage.js');</script>
+</head>
+
+<body>
+    <div class="register-passenger__wrapper">
+        <div class="step" id="step1">
+            <h2>Данные пассажира</h2>
+            <form id="passengerDataForm" class="form">
+                <div class="form__item">
+                    <div class="form__item__inner">
+                        <label for="fullName" class="label">ФИО:</label>
+                        <input type="text" id="fullName" name="fullName" class="input" placeholder="Фамилия Имя Отчество" required>
+                    </div>
+                </div>
+                <div class="form__item multi">
+                    <div class="form__item__inner">
+                        <label for="passportSeries" class="label">Серия паспорта:</label>
+                        <input type="text" id="passportSeries" name="passportSeries" class="input" placeholder="XXXX" required>
+                    </div>
+                    <div class="form__item__inner">
+                        <label for="passportNumber" class="label">Номер паспорта:</label>
+                        <input type="text" id="passportNumber" name="passportNumber" class="input" placeholder="XXXXXX" required>
+                    </div>
+                </div>
+                <div class="buttons__wrapper">
+                    <button type="button" id="toStep2" class="next-step-button">Далее</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="step section-2" id="step2" style="display: none;">
+            <h2>Выбор рейса</h2>
+            <div class="search__item">
+                <input type="text" id="searchFlights" placeholder="Поиск рейсов" class="input">
+            </div>
+            <div id="flightCardsContainer" class="search__result"></div>
+            <div class="buttons__wrapper">
+                <button type="button" id="backToStep1" class="cancel-step-button">Назад</button>
+                <button type="button" id="toStep3" class="next-step-button">Далее</button>
+            </div>
+        </div>
+
+        <div class="step" id="step3" style="display: none;">
+            <h2>Выбор места в самолете</h2>
+            <div id="seatSelectionContainer" class="plane__seats"></div>
+            <div class="buttons__wrapper">
+                <button type="button" id="backToStep2" class="cancel-step-button">Назад</button>
+                <button type="button" id="toStep4" class="next-step-button">Далее</button>
+            </div>
+        </div>
+
+        <div class="step" id="step4" style="display: none;">
+            <h2>Ваш билет</h2>
+            <div id="boardingPassForm" class="form printable">
+                <div class="result">
+                    <div class="result__inner">
+                        <div class="result__inner__ticket">
+                            <div class="ticket__header">
+                                <div class="ticket__header__title">Посадочный талон | Boarding pass</div>
+                            </div>
+                            <div class="ticket__content">
+                                <div class="ticket__content__section">
+                                    <div class="section__item">
+                                        <div class="section__item__title">Выход / Gate</div>
+                                        <div class="section__item__info" id="gateInfo"></div>
+                                    </div>
+                                    <div class="section__item">
+                                        <div class="section__item__title">Посадка / Boarding</div>
+                                        <div class="section__item__info" id="boardingInfo"></div>
+                                    </div>
+                                    <div class="section__item">
+                                        <div class="section__item__title">Конец посадки / Last call</div>
+                                        <div class="section__item__info warning" id="lastCallInfo"></div>
+                                    </div>
+                                </div>
+                                <div class="ticket__content__section">
+                                    <div class="section__item">
+                                        <div class="section__item__title">Пассажир / Passenger</div>
+                                        <div class="section__item__info" id="passengerInfo"></div>
+                                    </div>
+                                    <div class="section__item">
+                                        <div class="section__item__title">Вылет / Departure</div>
+                                        <div class="section__item__info" id="departureInfo"></div>
+                                    </div>
+                                    <div class="section__item">
+                                        <div class="section__item__title">Место / Seat</div>
+                                        <div class="section__item__info warning" id="seatInfo"></div>
+                                    </div>
+                                </div>
+                                <div class="ticket__content__section">
+                                    <div class="section__item">
+                                        <div class="section__item__title">Цена рейса / Flight price</div>
+                                        <div class="section__item__info" id="priceInfo"></div>
+                                    </div>
+                                    <div class="section__item">
+                                        <div class="section__item__title">Прилет / Arrival</div>
+                                        <div class="section__item__info" id="arrivalInfo"></div>
+                                    </div>
+                                    <div class="section__item">
+                                        <div class="section__item__title">Рейс / Flight</div>
+                                        <div class="section__item__info" id="flightNumberInfo"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons__wrapper">
+                <button type="button" id="backToStep3" class="cancel-step-button">Назад</button>
+                <button type="button" id="printTicket" class="next-step-button finish">Печать</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

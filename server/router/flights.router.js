@@ -82,6 +82,7 @@ flightRouter.put('/change', async (req, res) => {
     try {
         const { flightNumber, lastFlightPlane, flightPlane } = req.body
         
+        console.log(req.body);
         const changedFlight = await Flight.findOneAndUpdate({ 
             flightNumber 
         }, 
@@ -113,7 +114,7 @@ flightRouter.delete('/remove/:itemId', async (req, res) => {
     try {
         const itemId = req.params.itemId
         const removeFlight = await Flight.findOne({ flightNumber: itemId })
-
+        console.log(itemId);
         const flightPlane = await Plane.findOneAndUpdate({ 
             id: removeFlight.flightPlane 
         }, {

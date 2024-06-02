@@ -1,0 +1,30 @@
+.dashboard__container__body.flights .body__item {
+    width: 32.5%;
+}
+
+.search__input {
+    display: flex;
+    align-items: center;
+    border: 3px solid transparent;
+}
+
+.search__input:focus-within {
+    border: 3px solid #778bff;
+}
+
+.magnifier {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.keybind {
+    font-size: 18px;
+}
+
+.keybind span {
+    font-size: 15px;
+}

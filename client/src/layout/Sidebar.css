@@ -1,0 +1,129 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body,
+html {
+    height: 100%;
+    overflow: hidden;
+}
+
+.sidebar__logo {
+    padding: 20px 0;
+    margin-bottom: 20px;
+    width: 100%;
+    font-size: 35px;
+    font-weight: 800;
+    line-height: 1.1;
+    text-align: center;
+    border-bottom: 1px solid #434343;
+}
+
+.sidebar__link {
+    font-size: 16px;
+    font-weight: 500;
+    height: 60px;
+    padding: 15px;
+    transition: 0.2s linear background-color, color;
+    margin: 0 5px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.sidebar__link:hover {
+    background-color: #792bff;
+    color: #ffffff;
+}
+
+.sidebar__link.active {
+    background-color: #ffffff;
+}
+
+.sidebar__link img {
+    width: 23px;
+    height: 23px;
+}
+
+.sidebar__link .title {
+    width: 100%;
+    margin-left: 20px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+    padding: 3px;
+}
+
+.sidebar__link .title__main {
+    font-size: 17px;
+    width: 100%;
+    transition: ease-in-out 0.3s margin-bottom;
+}
+
+.sidebar__link .title__sub {
+    width: 300px;
+    top: 30px;
+    left: 3px;
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0;
+    color: #fff;
+    display: flex;
+    align-items: start;
+    line-height: 1.1;
+    transition: ease-in-out 0.5s opacity, ease-in-out 0.5s top, ease-in-out 0.5s color;
+}
+
+.sidebar__link:hover .title__sub {
+    opacity: 1;
+    top: 35px;
+}
+
+.sidebar__admin {
+    padding: 20px;
+    border-top: 1px solid #434343;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    position: fixed;
+    width: 300px;
+    bottom: 0;
+
+}
+
+.sidebar__admin .role,
+.sidebar__admin .fullname {
+    color: white;
+}
+
+.sidebar__admin .fullname {
+    margin-top: auto;
+}
+
+.sidebar__admin .quit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s linear background-color;
+}
+
+.sidebar__admin .quit:hover {
+    background-color: #982bff;
+}
+
+.sidebar__admin .quit .quit {
+    width: 50%;
+    height: 50%;
+}

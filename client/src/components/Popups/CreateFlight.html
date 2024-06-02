@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Flight</title>
+    <link rel="stylesheet" href="src/components/Popups/Popup.css">
+    <link rel="stylesheet" href="../src/utils/toasts.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="../src/utils/toasts.js" defer></script>
+    <script src="src/utils/dynamicImport.js"></script>
+    <script defer>loadModule('src/components/Popups/CreateFlight.js');</script>
+</head>
+
+<body>
+    <div class="popup" id="FlightPopup">
+        <div class="popup__container">
+            <div class="popup__container__head">
+                <div class="head__title">Создание рейса</div>
+                <div class="head__close" id="popupCloseButtonCreate">&times;</div>
+            </div>
+            <div class="popup__container__body">
+                <form id="createFlightForm">
+                    <div class="form-group">
+                        <label for="departureAirport">Аэропорт вылета:</label>
+                        <select id="departureAirport" name="departureAirport" required>
+                            <option value="">Выберите аэропорт вылета</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="destinationAirport">Аэропорт назначения:</label>
+                        <select id="destinationAirport" name="destinationAirport" required>
+                            <option value="">Выберите аэропорт назначения</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="currentPlane">Самолет рейса:</label>
+                        <select id="currentPlane" name="currentPlane" required>
+                            <option value="">Выберите самолет</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="flightPrice">Цена рейса (эконом) ₽:</label>
+                        <input type="number" id="flightPrice" name="flightPrice" placeholder="Цена рейса"
+                            autocomplete="off" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="flightTime">Время посадки на рейс:</label>
+                        <input type="text" id="flightTime" name="flightTime" placeholder="20:00" autocomplete="off"
+                            required>
+                        <label for="date">Дата:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gate">Номер выхода:</label>
+                        <select id="gate" name="gate" required>
+                            <option value="">Выберите номер выхода</option>
+                            <option value="1A">1A</option>
+                            <option value="1B">1B</option>
+                            <option value="1C">1C</option>
+                            <option value="1D">1D</option>
+                            <option value="1E">1E</option>
+                            <option value="1F">1F</option>
+                        </select>
+                    </div>
+                    <button type="submit">Создать рейс</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
