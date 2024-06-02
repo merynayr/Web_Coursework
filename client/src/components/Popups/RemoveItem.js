@@ -9,11 +9,11 @@ import getSocketPathByItemCategory from '../../utils/getSocketPathByItemCategory
 $(document).ready(function () {
     setupPopup("#removeItemPopup", "#popupCloseButtonRemove");
     $("#cancelButton").click(function () {
-        closePopup("#removeItemPopup"); 
+        closePopup("#removeItemPopup");
     });
 
     $("#popupCloseButtonRemove").click(function () {
-        closePopup("#removeItemPopup"); 
+        closePopup("#removeItemPopup");
     });
 
     $("#removeButton").click(async function () {
@@ -46,13 +46,13 @@ $(document).ready(function () {
             } else {
                 toastSuccess("Успешное удаление!")
                 socket.emit(socketPath, { status: true })
-                togglePopup("#removeItemPopup"); 
+                togglePopup("#removeItemPopup");
             }
         } catch (error) {
             toastError("Что-то пошло не так, попробуйте позже");
             console.error(error);
         } finally {
-            closePopup("#removeItemPopup"); 
+            closePopup("#removeItemPopup");
         }
     };
 });
