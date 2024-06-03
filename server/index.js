@@ -1,10 +1,7 @@
 import express from 'express'
-import cors from 'cors'
 import { router } from './router/index.js'
 import { connectToDatabase } from './db/index.js'
 import { success, error, info } from './utils/chalk.js'
-import socketController from './socket/socket.js'
-import { Server } from 'socket.io'
 import http from 'http'
 import 'dotenv/config'
 import path from 'path';
@@ -17,24 +14,8 @@ const __dirname = path.dirname(__filename);
 // creating express app/server
 const app = express()
 const server = http.createServer(app)
-const io = new Server(server, {
-    cors: {
-        origin: 'http://localhost:3000'
-    }
-})
 const port = process.env.PORT || 5000
 
-app.use(express.static(path.join(__dirname, '/client/public')));
-app.use(express.static(path.join(__dirname, '/client/src')));
-
-
-// enabling application/json headers
-app.use(express.json()) 
-// enabling cors policy
-app.use(cors({
-    origin: process.env.CLIENT_ORIGIN_URI,
-    methods: ["POST", "PUT", "GET", "DELETE", "OPTIONS"],
-}))
 
 // http://localhost:5000
 app.use('/api/flights', router.flightRouter)
@@ -44,8 +25,32 @@ app.use('/api/planes', router.planeRouter)
 app.use('/api/admins', router.adminRouter)
 
 
-// socket io connetions
-io.on('connection', socketController)
+app.use(express.static(path.join(__dirname, '../client')));
+// app.use(express.static(path.join(__dirname, '../client/src')));
+app.use(express.static(path.join(__dirname, '../client/src'), { 
+  setHeaders: (res, path, stat) => {
+    if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    }
+  }
+}));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client', 'index.html'));
+});
+// app.use(express.static(path.join(__dirname, '../admin')))
+// // ++
+// app.get(/^(?!\/api).\*/, (req, res) => {
+//     res.sendFile(path.join(__dirname, '../admin', 'index.html'))
+// })
+// // ++
+// app.use('/hello', (req, res) => res.send('world'))
+
+app.use(express.json()) 
+
+
+
+
 
 
 // Connecting to the database

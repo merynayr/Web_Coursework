@@ -31,6 +31,7 @@ passengerRouter.get('/', async (req, res) => {
 // [POST] http://localhost:5000/api/passengers/create
 passengerRouter.post('/create', async (req, res) => {
     try {
+        console.log(req.body);
         const { passportSeries, passportNumber } = req.body
 
         const passportData = `${passportSeries} ${passportNumber}`

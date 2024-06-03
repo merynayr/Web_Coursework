@@ -11,18 +11,17 @@ export const flightRouter = Router()
 // [GET] http://localhost:5000/api/flights/
 flightRouter.get('/', async (req, res) => {
     try {
+        console.log("RESPONSE");
         const allFlights = await Flight.find()
 
         if (!allFlights) {
             return res.send({ error: "Рейсов не найдено" })
         }
-
         return res.send({ 
             message: "Found some flighs", 
-            body: {
-                ...allFlights,
-                flightPlaneType
-            }
+            body: allFlights
+                // flightPlaneType
+            
         })
     } catch (e) {
         console.log(error("Some internal Error", e))
