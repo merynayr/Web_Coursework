@@ -96,7 +96,6 @@ async function createFlight(formData) {
         } else {
             toastSuccess("Новый рейс успешно создан!");
             closePopup("#FlightPopup");
-            route.navigate('/flights');
             socket.emit('isFlightsUpdate', { status: true });
         }
     } catch (error) {

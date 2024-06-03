@@ -81,6 +81,7 @@
 .form-group input[type="text1"],
 .form-group input[type="password"],
 .form-group input[type="number"],
+.form-group input[type="date"],
 .form-group select {
     width: calc(100% - 20px); /* Уменьшим немного ширину, чтобы учесть отступы */
     padding: 8px;
@@ -169,4 +170,6 @@ button[type="submit"]:hover {
     color: #fff;
 }
 
+.flightTime {
 
+}

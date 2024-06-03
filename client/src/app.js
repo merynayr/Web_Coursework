@@ -59,7 +59,7 @@ $(document).ready(function () {
     if (isAuthorized) {
         if (role === 'mainAdmin' && currentPath !== '/admins') {
             router.navigate('/admins');
-        } else if (role === 'subAdmin' && !['/register-passenger', '/passengers', '/flights', '/planes', '/airports'].includes(currentPath)) {
+        } else if (role === 'subAdmin' && !['/passengers', '/register-passenger', '/flights', '/planes', '/airports'].includes(currentPath)) {
             router.navigate('/passengers');
         }
     } else {
@@ -125,7 +125,7 @@ router.route('/passengers', function () {
 
 router.route('/', function () {
     loadSidebar();
-    $('#app').load('src/pages/AuthPage/AuthPage.html');
+    $('#app').load('src/pages/FlightsPage/FlightsPage.html');
 });
 
 router.route('/auth', function () {
