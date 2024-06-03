@@ -11,7 +11,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         const fullName = $("#fullName").val();
-        const role = $("#role").val();
+        const role = $("#AdminRole").val();
         const password = $("#password").val();
         const secretWord = $("#secretWord").val();
 
@@ -36,7 +36,6 @@ import { socket } from "../../socket.js";
 
 async function createAdmin(formData, jwtToken) {
     const isFormDataFilled = isDataFilled(formData);
-
     if (isFormDataFilled) {
         toastError("Кажется, вы что-то не указали");
         return;
@@ -57,7 +56,6 @@ async function createAdmin(formData, jwtToken) {
         } else {
             toastSuccess("Новый администратор успешно создан!");
             closePopup("adminPopup");
-            route.navigate('/admins');
             socket.emit('isAdminsUpdate', { status: true });
         }
     } catch (error) {

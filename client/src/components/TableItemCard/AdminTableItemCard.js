@@ -6,7 +6,7 @@ import '../../pages/FlightsPage/FlightsPage.css';
 export function createAdminTableItemCard(adminData) {
     const currentAdminFullName = localStorage.getItem('fullName');
     const isMyCard = currentAdminFullName === adminData.fullName
-    const formatRole = adminData.role === 'mainAdmin' ? "Главный администратор" : "Администратор";
+    const formatRole = adminData.role === 'mainAdmin' ? "Главный администратор" : "Модератор";
     const children = `
         ${isMyCard ? '<div class="table-item__badge green">Вы</div>' : ''}
         <div class="table-item">
