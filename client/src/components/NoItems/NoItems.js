@@ -1,5 +1,4 @@
-import { socket } from '../../socket';
-import './NoItems.css'
+// import './NoItems.css'
 
 export function renderNoItems(containerSelector, title, socketEmitEndpoint = "isFlightsUpdate", showUpdateButton = true) {
     const container = $(containerSelector);

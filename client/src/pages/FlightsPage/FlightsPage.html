@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flights Page</title>
     <link rel="stylesheet" href="src/pages/AdminsPage/AdminsPage.css">
-    <script src="src/utils/dynamicImport.js"></script> 
-    <script defer>loadModule('src/pages/FlightsPage/FlightsPage.js');</script>
+    <!-- <script src="src/utils/dynamicImport.js"></script> 
+    <script defer>loadModule('src/pages/FlightsPage/FlightsPage.js');</script> -->
+    <script type="module" src='/src/pages/FlightsPage/FlightsPage.js' defer></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../src/utils/toasts.css">
-    <script src="../src/utils/toasts.js" defer></script>
+    <link rel="stylesheet" href="../src/components/NoItems/NoItems.css">
+    <script type="module" src="/src/utils/toasts.js" defer></script>
+    <!-- <script type="module" src="../../api/index.js" defer></script> -->
     <link rel="stylesheet" href="src/components/TableItemCard/TableItemCard.css">
 </head>
 <body>

@@ -1,8 +1,7 @@
 import { createRegisterPassengerFlightsCard } from '../../components/TableItemCard/RegisterPassengerFlightsCard.js';
-import { socket } from '../../socket.js';
+// import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 import { calculateLastCallTime } from '../../utils/calculateLastCallTime.js'
-import axios from 'axios';
 
 $(document).ready(function () {
     let formData = {};
@@ -87,25 +86,27 @@ $(document).ready(function () {
         renderFlights(filteredFlights);
 
         if (searchValue === '') {
-            socket.emit('flightsDataGet');
+            fetchFlights()
         }
     });
+    const fetchFlights = () => {
+        $.ajax({
+            url:`http://localhost:5000/api/flights`,
+            method: 'GET',
+            success: (data) => {
+                    flights = data.body;
+                    unChangedFlights = data.body;
+                    renderFlights(flights);
+            },
+            error: (err) => {
+                console.error('Error fetching flights:', err);
+                renderNoItems(container, 'Рейсов не найдено 😔', 'flightsDataGet', true);
+            }
+        });
+    };
 
-    socket.emit('flightsDataGet');
-
-    socket.on('flightsResponse', (data) => {
-        if (data.body.length) {
-            flights = data.body;
-            unChangedFlights = data.body;
-            renderFlights(flights);
-        } else {
-            renderNoItems(container, 'Рейсов не найдено 😔', 'flightsDataGet', true);
-        }
-    });
-
-    socket.on('flightsUpdate', () => {
-        socket.emit('flightsDataGet');
-    });
+    // Вызов функции для получения данных о рейсах при загрузке страницы
+    fetchFlights();
 
     const loadSeats = (selectedFlight, planeSeatPlaces) => {
         const seatSelectionContainer = $('#seatSelectionContainer');
@@ -158,35 +159,41 @@ $(document).ready(function () {
     };
 
     $('#printTicket').click(async function () {
+        console.log(formData);
+        try {
+            const response = await fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.CREATE}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
 
-        await axios.post(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.CREATE}`, formData)
-            .then(res => {
-                if (res.data.error) {
-                    toastError("Данный пассажир уже существует")
-                    return
-                }
-                toastSuccess("Новый пассажир успешно создан")
+            if (data.error) {
+                toastError("Данный пассажир уже существует");
+                return;
+            }
 
-                // print the ticket
-                window.print();
-                if (window.location === '/register-passenger') {
-                    setTimeout(() => {
-                        window.location = '/register-passenger'
-                    }, 5000)
-                } else {
-                    setTimeout(() => {
-                        window.location = '/passenger'
-                    }, 3000)
-                }
-            })
-            .catch(err => {
-                if (err.body.error) {
-                    toastError("Что-то пошло не так, попробуйте позже")
-                }
-            })
+            toastSuccess("Новый пассажир успешно создан");
 
-
+            // print the ticket
+            window.print();
+            if (window.location === '/register-passenger') {
+                setTimeout(() => {
+                    window.location = '/register-passenger';
+                }, 5000);
+            } else {
+                setTimeout(() => {
+                    window.location = '/passenger';
+                }, 3000);
+            }
+        } catch (error) {
+            console.error(error);
+            toastError("Что-то пошло не так, попробуйте позже");
+        }
     });
+
 
     function validateStep1(data) {
         const fullNameValid = data.fullName && data.fullName.trim().length > 0;

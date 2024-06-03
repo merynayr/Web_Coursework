@@ -1,3 +1,4 @@
+import { router } from "./router.js";
 // Загрузка боковой панели
 function loadSidebar() {
     const sidebarElement = $('#sidebar');

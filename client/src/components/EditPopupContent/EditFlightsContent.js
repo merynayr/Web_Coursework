@@ -1,6 +1,5 @@
 import { isDataFilled } from "../../utils/isDataFilled.js";
-import { socket } from "../../socket.js";
-import axios from "axios";
+// import { socket } from "../../socket.js";
 import { endpoints } from "../../api/index.js";
 
 $(document).ready(function() {
@@ -83,6 +82,7 @@ $(document).ready(function() {
 });
 
 // Сохранение изменений
+// Сохранение изменений
 export function saveChanges(formData, id) {
     const isFormDataFilled = isDataFilled(formData);
 
@@ -92,14 +92,26 @@ export function saveChanges(formData, id) {
     }
     formData._id = id;
 
-    axios.put(`${endpoints.SERVER_ORIGIN_URI}${endpoints.FLIGHTS.ROUTE}${endpoints.FLIGHTS.CHANGE}`, formData)
-    .then(res => {
-        if (res.data.error) {
+    fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.FLIGHTS.ROUTE}${endpoints.FLIGHTS.CHANGE}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
             toastError("Что-то пошло не так, попробуйте позже");
             return;
         }
         toastSuccess("Данные рейса успешно изменены");
-        socket.emit("isFlightsUpdate", { status: true });
+        // socket.emit("isFlightsUpdate", { status: true });
     })
     .catch(() => {
         toastError("Что-то пошло не так, попробуйте позже");

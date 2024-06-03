@@ -1,11 +1,11 @@
-icon = {
+var icon = {
     success:'<img src="src/assets/toasts/success.svg" alt="Success">',
     danger: '<img src="src/assets/toasts/danger.png" alt="Error">',
     warning: '<img src="src/assets/toasts/warning.png" alt="Warning">',
     info: '<img src="src/assets/toasts/info.svg" alt="Info">',
 };
 
-toastConfig = {
+var toastConfig = {
     position: "top-right",
     autoClose: 5000,
     hideProgressBar: false,
@@ -16,7 +16,7 @@ toastConfig = {
     theme: "light",
 };
 // toast.js
-showToast = (message = "Sample Message", toastType = "info", duration = toastConfig.autoClose) => {
+var showToast = (message = "Sample Message", toastType = "info", duration = toastConfig.autoClose) => {
     if (!Object.keys(icon).includes(toastType)) toastType = "info";
 
     let container = document.querySelector('.toast-container');
@@ -54,19 +54,19 @@ showToast = (message = "Sample Message", toastType = "info", duration = toastCon
 };
 
 
-toastSuccess = (text) => {
+var toastSuccess = (text) => {
     showToast(text, "success", 5000);
 }
 
-toastError = (text) => {
+var toastError = (text) => {
     showToast(text, "danger", 5000);
 }
 
-toastInfo = (text) => {
+var toastInfo = (text) => {
     showToast(text, "info", 5000);
 }
 
-toastWarning = (text) => {
+var toastWarning = (text) => {
     showToast(text, "warning", 5000);
 }
 

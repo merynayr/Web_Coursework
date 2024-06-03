@@ -1,5 +1,8 @@
 // AdminsPage.js
 import { togglePopup, setupPopup, closePopup } from './Popup.js';
+import { isDataFilled } from "../../utils/isDataFilled.js";
+import { socket } from "../../socket.js";
+import { endpoints } from "../../api/index.js";
 
 $(document).ready(function () {
     setupPopup("#adminPopup", "#popupCloseButtonCreate");
@@ -7,7 +10,7 @@ $(document).ready(function () {
         togglePopup("#adminPopup");
     });
 
-    $("#adminPopup").submit(function (e) {
+    $("#adminPopup").submit(async function (e) {
         e.preventDefault();
 
         const fullName = $("#fullName").val();
@@ -24,15 +27,10 @@ $(document).ready(function () {
             secretWord
         };
 
-        createAdmin(formData, jwtToken);
+        await createAdmin(formData, jwtToken);
         closePopup("#adminPopup");
     });
 });
-
-import { isDataFilled } from "../../utils/isDataFilled.js";
-import axios from "axios";
-import { socket } from "../../socket.js";
-
 
 async function createAdmin(formData, jwtToken) {
     const isFormDataFilled = isDataFilled(formData);
@@ -42,20 +40,24 @@ async function createAdmin(formData, jwtToken) {
     }
 
     try {
-        const res = await axios.post(`${endpoints.SERVER_ORIGIN_URI}${endpoints.ADMINS.ROUTE}${endpoints.ADMINS.CREATE}`, {
-            ...formData,
-            role: formData.role === 'Главный администратор' ? 'mainAdmin' : 'subAdmin'
-        }, {
+        const response = await fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.ADMINS.ROUTE}${endpoints.ADMINS.CREATE}`, {
+            method: 'POST',
             headers: {
-                token: `Bearer ${jwtToken}`
-            }
+                'Content-Type': 'application/json',
+                'token': `Bearer ${jwtToken}`
+            },
+            body: JSON.stringify({
+                ...formData,
+                role: formData.role === 'Главный администратор' ? 'mainAdmin' : 'subAdmin'
+            })
         });
+        const data = await response.json();
 
-        if (res.data.error) {
-            toastError(res.data.error);
+        if (data.error) {
+            toastError(data.error);
         } else {
             toastSuccess("Новый администратор успешно создан!");
-            closePopup("adminPopup");
+            closePopup("#adminPopup");
             socket.emit('isAdminsUpdate', { status: true });
         }
     } catch (error) {

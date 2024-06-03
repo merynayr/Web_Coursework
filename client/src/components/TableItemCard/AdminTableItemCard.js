@@ -1,6 +1,6 @@
 // AdminTableItemCard.js
 import { createTableItemCard } from './TableItemCard.js';
-import '../../pages/FlightsPage/FlightsPage.css';
+// import '../../pages/FlightsPage/FlightsPage.css';
 
 
 export function createAdminTableItemCard(adminData) {

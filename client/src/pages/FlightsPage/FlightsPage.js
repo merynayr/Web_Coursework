@@ -1,12 +1,13 @@
 import { createFlightTableItemCard } from '../../components/TableItemCard/FlightTableItemCard.js';
-import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
+import { endpoints } from "../../api/index.js";
+
 
 $(document).ready(function () {
     let flights = [];
     let unChangedFlights = [];
     let isFetching = false;
-
+    console.log("HI");
     const allLinks = document.querySelectorAll('.create-new-button');
     allLinks.forEach(link => link.style.display = 'block');
 
@@ -48,25 +49,31 @@ $(document).ready(function () {
         renderFlights(filteredFlights);
 
         if (searchValue === '') {
-            socket.emit('flightsDataGet');
+            fetchFlights();
         }
     });
 
-    // Получаем данные рейсов при загрузке страницы через socket
-    socket.emit('flightsDataGet');
+    // Функция для получения данных рейсов через HTTP-запрос
+    const fetchFlights = () => {
+        if (isFetching) return;
+        isFetching = true;
+        $.ajax({
+            url: `${endpoints.SERVER_ORIGIN_URI}${endpoints.FLIGHTS.ROUTE}${endpoints.FLIGHTS.GET_ALL}`,
+            method: 'GET',
+            success: (data) => {
+                flights = data.body;
+                unChangedFlights = data.body;
+                renderFlights(flights);
 
-    // Обрабатываем ответ с данными рейсов
-    socket.on('flightsResponse', (data) => {
-        if (data.body.length) {
-            flights = data.body;
-            unChangedFlights = data.body;
-            renderFlights(flights);
-        }
-        isFetching = false;
-    });
+                isFetching = false;
+            },
+            error: (err) => {
+                console.error('Error fetching flights:', err);
+                isFetching = false;
+                renderFlights([]);
+            }
+        });
+    };
 
-    // Обновляем список рейсов в реальном времени
-    socket.on('flightsUpdate', () => {
-        socket.emit('flightsDataGet');
-    });
+    fetchFlights();
 });

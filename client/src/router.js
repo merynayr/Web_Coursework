@@ -27,4 +27,4 @@ class Router {
     }
 }
 
-const router = new Router();
+export const router = new Router();
