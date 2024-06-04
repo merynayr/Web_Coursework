@@ -6,7 +6,7 @@ import http from 'http'
 import 'dotenv/config'
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import bodyParser from 'body-parser'
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -38,15 +38,8 @@ app.use(express.static(path.join(__dirname, '../client/src'), {
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client', 'index.html'));
 });
-// app.use(express.static(path.join(__dirname, '../admin')))
-// // ++
-// app.get(/^(?!\/api).\*/, (req, res) => {
-//     res.sendFile(path.join(__dirname, '../admin', 'index.html'))
-// })
-// // ++
-// app.use('/hello', (req, res) => res.send('world'))
 
-app.use(express.json()) 
+app.use(bodyParser.json()) 
 
 
 

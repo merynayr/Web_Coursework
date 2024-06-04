@@ -15,6 +15,7 @@ $(document).ready(function () {
     });
 
     $("#removeButton").click(async function () {
+        console.log("Remove");
         const itemId = $("#removeItemPopup").data("Id");
         const itemCategory = $("#removeItemPopup").data("itemCategory"); // Получаем категорию элемента
         removeItem(itemId, itemCategory); // Вызываем функцию удаления с передачей категории элемента
@@ -22,10 +23,13 @@ $(document).ready(function () {
     window.togglePopup = togglePopup;
 
     const removeItem = async (itemId, itemCategory) => {
+        console.log("Remove");
+
         const socketPath = getSocketPathByItemCategory(itemCategory)
         const jwtToken = localStorage.getItem('token');
 
         try {
+            console.log("Remove");
             const response = await fetch(`${itemCategories[itemCategory]}/${itemId}`, {
                 method: 'DELETE',
                 headers: {

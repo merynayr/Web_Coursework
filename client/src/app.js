@@ -50,10 +50,10 @@ $(document).ready(function () {
     const publicPaths = ['/register-passenger', '/flights', '/auth'];
 
     // Проверка авторизации при первом открытии
-    const isAuthorized = !!localStorage.getItem('token') &&
-        !!localStorage.getItem('fullName') &&
-        !!localStorage.getItem('admin-type');
-
+    // const isAuthorized = !!localStorage.getItem('token') &&
+    //     !!localStorage.getItem('fullName') &&
+    //     !!localStorage.getItem('admin-type');
+    const isAuthorized = true;
     const currentPath = window.location.pathname;
     const role = localStorage.getItem('admin-type');
 
@@ -120,7 +120,9 @@ router.route('/passengers', function () {
     if (role === 'subAdmin') {
         $('#content').load('src/pages/PassengersPage/PassengersPage.html');
     } else {
-        router.navigate('/auth');
+        // router.navigate('/auth');
+        $('#content').load('src/pages/PassengersPage/PassengersPage.html');
+
     }
 });
 

@@ -159,24 +159,29 @@ $(document).ready(function () {
     };
 
     $('#printTicket').click(async function () {
-        console.log(formData);
+        console.log("FormData: ", formData);
         try {
-            const response = await fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.CREATE}`, {
+            const response = await fetch(`http://localhost:5000/api/passengers/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(formData)
             });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
             const data = await response.json();
-
+    
             if (data.error) {
                 toastError("Данный пассажир уже существует");
                 return;
             }
-
+    
             toastSuccess("Новый пассажир успешно создан");
-
+    
             // print the ticket
             window.print();
             if (window.location === '/register-passenger') {
@@ -193,7 +198,7 @@ $(document).ready(function () {
             toastError("Что-то пошло не так, попробуйте позже");
         }
     });
-
+    
 
     function validateStep1(data) {
         const fullNameValid = data.fullName && data.fullName.trim().length > 0;

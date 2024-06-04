@@ -9,7 +9,7 @@ export function createTableItemCard({ children, onEdit, onRemove }) {
     
     const card = $(`
         <div class="body__item">
-            ${isAuthorized ? `
+            ${! isAuthorized ? `
                 <div class="body__item__tools">
                     <div class="tool__item remove">
                         <img src="src/assets/card/trash.svg" alt="Удалить">
@@ -25,7 +25,7 @@ export function createTableItemCard({ children, onEdit, onRemove }) {
         </div>
     `);
 
-    if (isAuthorized) {
+    if (!isAuthorized) {
         card.find('.remove').on('click', onRemove);
         card.find('.edit').on('click', onEdit);
     }
