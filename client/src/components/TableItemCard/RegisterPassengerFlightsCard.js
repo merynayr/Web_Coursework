@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { endpoints } from '../../api/index.js';
 import { flightStatus as flStatus } from '../../utils/flightsStatus.js';
 import '../../pages/FlightsPage/FlightsPage.css';
@@ -18,28 +17,33 @@ export function createRegisterPassengerFlightsCard(props, onCardClick) {
     const clickHandler = () => {
         let setFormData = {
             flightNumber,
-            departureAirport, 
-            destinationAirport, 
+            departureAirport,
+            destinationAirport,
             flightPrice,
             flightTime,
             date,
             gate,
             flightStatus
         };
-
         if (flightNumber) {
             toastInfo(`Рейс успешно выбран`);
             const currentFlightNumber = flightNumber;
-            axios.get(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PLANES.ROUTE}${endpoints.PLANES.PLANE}/${currentFlightNumber}`)
-            .then(res => {
-                setFormData = { ...setFormData, planeSeatPlaces: [...res.data.body] };
-                console.log(setFormData);
-                onCardClick(setFormData); // Передача данных через callback
-            })
-            .catch(err => {
-                console.error(err);
-                toastError("Что-то пошло не так, попробуйте позже");
-            });
+            fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PLANES.ROUTE}${endpoints.PLANES.PLANE}/${currentFlightNumber}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    setFormData = { ...setFormData, planeSeatPlaces: [...data.body] };
+                    console.log(setFormData);
+                    onCardClick(setFormData); // Передача данных через callback
+                })
+                .catch(err => {
+                    console.error(err);
+                    toastError("Что-то пошло не так, попробуйте позже");
+                });
         } else {
             onCardClick(setFormData); // Передача данных через callback
         }

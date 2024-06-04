@@ -42,21 +42,24 @@ async function createAdmin(formData, jwtToken) {
     }
 
     try {
-        const res = await axios.post(`${endpoints.SERVER_ORIGIN_URI}${endpoints.ADMINS.ROUTE}${endpoints.ADMINS.CREATE}`, {
-            ...formData,
-            role: formData.role === 'Главный администратор' ? 'mainAdmin' : 'subAdmin'
-        }, {
+        const response = await fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.ADMINS.ROUTE}${endpoints.ADMINS.CREATE}`, {
+            method: 'POST',
             headers: {
-                token: `Bearer ${jwtToken}`
-            }
+                'Content-Type': 'application/json',
+                'token': `Bearer ${jwtToken}`
+            },
+            body: JSON.stringify({
+                ...formData,
+                role: formData.role === 'Главный администратор' ? 'mainAdmin' : 'subAdmin'
+            })
         });
+        const data = await response.json();
 
-        if (res.data.error) {
-            toastError(res.data.error);
+        if (data.error) {
+            toastError(data.error);
         } else {
             toastSuccess("Новый администратор успешно создан!");
-            closePopup("adminPopup");
-            socket.emit('isAdminsUpdate', { status: true });
+            closePopup("#adminPopup");
         }
     } catch (error) {
         console.error("Error creating admin:", error);

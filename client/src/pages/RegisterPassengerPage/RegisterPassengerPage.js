@@ -2,7 +2,6 @@ import { createRegisterPassengerFlightsCard } from '../../components/TableItemCa
 import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 import { calculateLastCallTime } from '../../utils/calculateLastCallTime.js'
-import axios from 'axios';
 
 $(document).ready(function () {
     let formData = {};
@@ -158,34 +157,43 @@ $(document).ready(function () {
     };
 
     $('#printTicket').click(async function () {
-
-        await axios.post(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.CREATE}`, formData)
-            .then(res => {
-                if (res.data.error) {
-                    toastError("Данный пассажир уже существует")
-                    return
-                }
-                toastSuccess("Новый пассажир успешно создан")
-
-                // print the ticket
-                window.print();
-                if (window.location === '/register-passenger') {
-                    setTimeout(() => {
-                        window.location = '/register-passenger'
-                    }, 5000)
-                } else {
-                    setTimeout(() => {
-                        window.location = '/passenger'
-                    }, 3000)
-                }
-            })
-            .catch(err => {
-                if (err.body.error) {
-                    toastError("Что-то пошло не так, попробуйте позже")
-                }
-            })
-
-
+        try {
+            const response = await fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.CREATE}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+    
+            if (data.error) {
+                toastError("Данный пассажир уже существует");
+                return;
+            }
+    
+            toastSuccess("Новый пассажир успешно создан");
+    
+            // print the ticket
+            window.print();
+            if (window.location === '/register-passenger') {
+                setTimeout(() => {
+                    window.location = '/register-passenger';
+                }, 5000);
+            } else {
+                setTimeout(() => {
+                    window.location = '/passenger';
+                }, 3000);
+            }
+        } catch (error) {
+            console.error(error);
+            toastError("Что-то пошло не так, попробуйте позже");
+        }
     });
 
     function validateStep1(data) {

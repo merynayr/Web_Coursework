@@ -1,8 +1,7 @@
 import { createAdminTableItemCard } from '../../components/TableItemCard/AdminTableItemCard.js';
-import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 
-$(document).ready(function() {
+$(document).ready(function () {
     let admins = [];
     let unChangedAdmins = [];
     let isFetching = false;
@@ -27,33 +26,38 @@ $(document).ready(function() {
     };
 
     // Обработчик поиска
-    $('#searchInput').on('input', function(e) {
+    $('#searchInput').on('input', function (e) {
         const searchValue = e.target.value.toLowerCase();
         const filteredAdmins = unChangedAdmins.filter(admin => admin.fullName.toLowerCase().includes(searchValue));
         renderAdmins(filteredAdmins);
 
         if (searchValue === '') {
-            socket.emit('adminsDataGet');
+            fetchAdmins();
         }
     });
 
-    // Получаем данные администраторов при загрузке страницы через socket
-    socket.emit('adminsDataGet');
+    // Функция для получения данных рейсов через HTTP-запрос
+    const fetchAdmins = () => {
+        if (isFetching) return;
+        isFetching = true;
+        $.ajax({
+            url: `${endpoints.SERVER_ORIGIN_URI}${endpoints.ADMINS.ROUTE}${endpoints.ADMINS.GET_ALL}`,
+            method: 'GET',
+            success: (data) => {
+                admins = data.body;
+                unChangedAdmins = data.body;
+                renderAdmins(admins);
 
-    // Обрабатываем ответ с данными администраторов
-    socket.on('adminsResponse', (data) => {
-        if (data.body.length) {
-            admins = data.body;
-            unChangedAdmins = data.body;
-            renderAdmins(admins);
-        }
+                isFetching = false;
+            },
+            error: (err) => {
+                console.error('Error fetching admins:', err);
+                isFetching = false;
+                renderAdmins([]);
+            }
+        });
+    };
 
-        isFetching = false;
-    });
+    fetchAdmins();
 
-    // Обновляем список администраторов в реальном времени
-    socket.on('adminsUpdate', () => {
-        socket.emit('adminsDataGet');
-    });
-    
 });

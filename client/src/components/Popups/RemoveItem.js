@@ -1,7 +1,5 @@
 import { togglePopup, setupPopup, closePopup } from './Popup.js';
-import axios from 'axios';
 import { itemCategories } from '../../api/itemCategoriesApi.js'
-import { socket } from "../../socket.js";
 import getSocketPathByItemCategory from '../../utils/getSocketPathByItemCategory'
 
 
@@ -17,6 +15,7 @@ $(document).ready(function () {
     });
 
     $("#removeButton").click(async function () {
+        console.log("Remove");
         const itemId = $("#removeItemPopup").data("Id");
         const itemCategory = $("#removeItemPopup").data("itemCategory"); // Получаем категорию элемента
         removeItem(itemId, itemCategory); // Вызываем функцию удаления с передачей категории элемента
@@ -24,28 +23,32 @@ $(document).ready(function () {
     window.togglePopup = togglePopup;
 
     const removeItem = async (itemId, itemCategory) => {
+        console.log("Remove");
+
         const socketPath = getSocketPathByItemCategory(itemCategory)
         const jwtToken = localStorage.getItem('token');
 
         try {
-            console.log(itemCategory, itemCategories[itemCategory], itemId);
-            const response = await axios.delete(`${itemCategories[itemCategory]}/${itemId}`, {
+            console.log("Remove");
+            const response = await fetch(`${itemCategories[itemCategory]}/${itemId}`, {
+                method: 'DELETE',
                 headers: {
-                    Authorization: `Bearer ${jwtToken}`
+                    'Authorization': `Bearer ${jwtToken}`
                 }
             });
+            const data = await response.json();
 
-            if (response.data.error) {
-                toastError(response.data.error);
+            if (data.error) {
+                toastError(data.error);
 
-                if (response.data.error.isRemoveAdminData !== undefined) {
+                if (data.error.isRemoveAdminData !== undefined) {
                     localStorage.setItem('fullName', '');
                     localStorage.setItem('token', '');
                     localStorage.setItem('admin-type', '');
                 }
             } else {
                 toastSuccess("Успешное удаление!")
-                socket.emit(socketPath, { status: true })
+                // socket.emit(socketPath, { status: true })
                 togglePopup("#removeItemPopup");
             }
         } catch (error) {

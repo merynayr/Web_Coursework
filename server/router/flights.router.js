@@ -19,10 +19,7 @@ flightRouter.get('/', async (req, res) => {
 
         return res.send({ 
             message: "Found some flighs", 
-            body: {
-                ...allFlights,
-                flightPlaneType
-            }
+            body: allFlights
         })
     } catch (e) {
         console.log(error("Some internal Error", e))

@@ -44,7 +44,8 @@ export const endpoints = {
         ROUTE: "/api/passengers",
         CREATE: '/create',
         REMOVE: '/remove',
-        CHANGE: '/change'
+        CHANGE: '/change',
+        GET_ALL: "/"
     }
 }
 

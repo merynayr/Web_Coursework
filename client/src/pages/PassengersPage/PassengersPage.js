@@ -1,5 +1,4 @@
 import { createPassengerTableItemCard } from '../../components/TableItemCard/PassengerTableItemCard.js';
-import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 
 $(document).ready(function () {
@@ -39,26 +38,31 @@ $(document).ready(function () {
         renderPassengers(filteredPassengers);
 
         if (searchValue === '') {
-            socket.emit('passengersDataGet');
+            fetchPassengers();
         }
     });
 
-    // Получаем данные пассажиров при загрузке страницы через socket
-    socket.emit('passengersDataGet');
+    // Функция для получения данных пассажиров через HTTP-запрос
+    const fetchPassengers = () => {
+        if (isFetching) return;
+        isFetching = true;
+        $.ajax({
+            url: `${endpoints.SERVER_ORIGIN_URI}${endpoints.PASSENGERS.ROUTE}${endpoints.PASSENGERS.GET_ALL}`,
+            method: 'GET',
+            success: (data) => {
+                passengers = data.body;
+                unChangedPassengers = data.body;
+                renderPassengers(passengers);
 
-    // Обрабатываем ответ с данными пассажиров
-    socket.on('passengersResponse', (data) => {
-        if (data.body.length) {
-            passengers = data.body;
-            unChangedPassengers = data.body;
-            renderPassengers(passengers);
-        }
-        isFetching = false;
-    });
+                isFetching = false;
+            },
+            error: (err) => {
+                console.error('Error fetching passengers:', err);
+                isFetching = false;
+                renderPassengers([]);
+            }
+        });
+    };
 
-    // Обновляем список пассажиров в реальном времени
-    socket.on('passengersUpdate', () => {
-        socket.emit('passengersDataGet');
-    });
-
+    fetchPassengers();
 });
