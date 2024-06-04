@@ -1,6 +1,5 @@
 import { endpoints } from '../../api/index.js';
 import { flightStatus as flStatus } from '../../utils/flightsStatus.js';
-import '../../pages/FlightsPage/FlightsPage.css';
 
 export function createRegisterPassengerFlightsCard(props, onCardClick) {
     const {
@@ -37,7 +36,6 @@ export function createRegisterPassengerFlightsCard(props, onCardClick) {
                 })
                 .then(data => {
                     setFormData = { ...setFormData, planeSeatPlaces: [...data.body] };
-                    console.log(setFormData);
                     onCardClick(setFormData); // Передача данных через callback
                 })
                 .catch(err => {

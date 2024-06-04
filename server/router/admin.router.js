@@ -44,15 +44,15 @@ adminRouter.post('/create', async (req, res) => {
         })
 
         await admin.save()
-        .then(() => {
-            return res.send({ 
-                message: "Новый администратор был успешно создан", 
-                body: { token, fullName, role: admin.role } 
+            .then(() => {
+                return res.send({
+                    message: "Новый администратор был успешно создан",
+                    body: { token, fullName, role: admin.role }
+                })
             })
-        })
-        .catch(() => {
-            return res.send({ error: "Что-то пошло не так, попробуйте позже" })
-        })
+            .catch(() => {
+                return res.send({ error: "Что-то пошло не так, попробуйте позже" })
+            })
     } catch (e) {
         console.log(error("Some Internal Error", e))
         return res.send({ error: "Some Internal error", status: 500 })
@@ -76,18 +76,16 @@ adminRouter.post('/login', async (req, res) => {
         if (!passwordCheck || secretWord !== admin.secretWord) {
             return res.send({ error: "Введенные данные оказались не верными" })
         }
-
         const token = jwt.sign({
             fullName
         }, process.env.JWT_SECRET, { expiresIn: '325d' })
 
         const adminData = { fullName, role: admin.role, token }
-
         return res.send({ message: "Successfully logged in", adminData })
         // return res.send({ message: "Successfully logged in", adminData })
     } catch (e) {
         console.log(error("Some Internal Error", e))
-        return res.send({ error: "Some Internal error", status: 500 })   
+        return res.send({ error: "Some Internal error", status: 500 })
     }
 })
 
@@ -99,7 +97,7 @@ adminRouter.put('/change', async (req, res) => {
         role = role === 'Главный администратор' ? 'mainAdmin' : 'subAdmin'
 
         const admin = await Admin.findOne({ id })
-        
+
         if (!admin) {
             return res.send({ error: "Данный администратор не найден" })
         }
@@ -112,7 +110,7 @@ adminRouter.put('/change', async (req, res) => {
         return res.send({ message: "Данные администратора успешно изменены" })
     } catch (e) {
         console.log(error("Some Internal Error", e))
-        return res.send({ error: "Some Internal error", status: 500 })   
+        return res.send({ error: "Some Internal error", status: 500 })
     }
 })
 
@@ -121,7 +119,7 @@ adminRouter.delete('/remove/:id', async (req, res) => {
     try {
         const { id } = req.params
 
-        const removedAdmin = await Admin.findOneAndRemove({ id })
+        const removedAdmin = await Admin.findOneAndDelete({ id })
 
         if (!removedAdmin) {
             return res.send({ error: "Данный администратор не найден" })

@@ -1,4 +1,4 @@
-import { endpoints } from "."
+import { endpoints } from "./index.js"
 
 const flightsPath = `${endpoints.SERVER_ORIGIN_URI}${endpoints.FLIGHTS.ROUTE}${endpoints.FLIGHTS.REMOVE}`
 const planesPath = `${endpoints.SERVER_ORIGIN_URI}${endpoints.PLANES.ROUTE}${endpoints.PLANES.REMOVE}`

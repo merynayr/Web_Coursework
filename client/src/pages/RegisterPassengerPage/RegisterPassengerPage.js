@@ -1,5 +1,4 @@
 import { createRegisterPassengerFlightsCard } from '../../components/TableItemCard/RegisterPassengerFlightsCard.js';
-import { socket } from '../../socket.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
 import { calculateLastCallTime } from '../../utils/calculateLastCallTime.js'
 
@@ -38,7 +37,6 @@ $(document).ready(function () {
         }
 
         if (nextStep.is('#step3')) {
-            console.log(formData);
             switchStep(3, formData.flightInfo, formData.flightInfo.planeSeatPlaces);
         }
 
@@ -74,7 +72,7 @@ $(document).ready(function () {
                 container.append(card);
             });
         } else {
-            renderNoItems(container, 'Рейсов не найдено 😔', 'flightsDataGet', true);
+            renderNoItems(container, 'Рейсов не найдено 😔', true);
         }
     };
 
@@ -86,25 +84,27 @@ $(document).ready(function () {
         renderFlights(filteredFlights);
 
         if (searchValue === '') {
-            socket.emit('flightsDataGet');
+            fetchFlights();
         }
     });
 
-    socket.emit('flightsDataGet');
+    const fetchFlights = () => {
+        $.ajax({
+            url: `${endpoints.SERVER_ORIGIN_URI}${endpoints.FLIGHTS.ROUTE}${endpoints.FLIGHTS.GET_ALL}`,
+            method: 'GET',
+            success: (data) => {
+                flights = data.body;
+                unChangedFlights = data.body;
+                renderFlights(flights);
+            },
+            error: (err) => {
+                console.error('Error fetching flights:', err);
+                renderFlights([]);
+            }
+        });
+    };
 
-    socket.on('flightsResponse', (data) => {
-        if (data.body.length) {
-            flights = data.body;
-            unChangedFlights = data.body;
-            renderFlights(flights);
-        } else {
-            renderNoItems(container, 'Рейсов не найдено 😔', 'flightsDataGet', true);
-        }
-    });
-
-    socket.on('flightsUpdate', () => {
-        socket.emit('flightsDataGet');
-    });
+    fetchFlights();
 
     const loadSeats = (selectedFlight, planeSeatPlaces) => {
         const seatSelectionContainer = $('#seatSelectionContainer');

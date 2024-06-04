@@ -139,7 +139,7 @@ passengerRouter.delete('/remove/:id', async (req, res) => {
             return res.send({ error: "Seat not found in plane" });
         }
         // remove the passenger
-        const removePassenger = await Passenger.findOneAndRemove({ id: passenegerId })
+        const removePassenger = await Passenger.findOneAndDelete({ id: passenegerId })
 
         if (!removePassenger) {
             return res.send({ error: "Something gone wrong, passenger hasn't removed" })

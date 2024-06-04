@@ -1,9 +1,6 @@
-import { socket } from '../../socket';
-import './NoItems.css'
-
-export function renderNoItems(containerSelector, title, socketEmitEndpoint = "isFlightsUpdate", showUpdateButton = true) {
+export function renderNoItems(containerSelector, title, showUpdateButton = true) {
     const container = $(containerSelector);
-    container.empty(); // Очистим контейнер перед вставкой сообщения
+    container.empty();
 
     const noItemsHtml = `
         <div class="no-items">
@@ -14,13 +11,5 @@ export function renderNoItems(containerSelector, title, socketEmitEndpoint = "is
         </div>
     `;
 
-    container.html(noItemsHtml); // Вставим сообщение в указанный контейнер
-
-    // Назначаем обработчик события для кнопки обновления
-    if (showUpdateButton) {
-        $('#updateButton').on('click', function() {
-            // Отправляем запрос с текущей строкой поиска
-            socket.emit(socketEmitEndpoint, { search: searchInput });
-        });
-    }
+    container.html(noItemsHtml); 
 }

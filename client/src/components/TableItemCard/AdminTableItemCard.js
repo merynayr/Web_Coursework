@@ -1,7 +1,5 @@
 // AdminTableItemCard.js
 import { createTableItemCard } from './TableItemCard.js';
-import '../../pages/FlightsPage/FlightsPage.css';
-
 
 export function createAdminTableItemCard(adminData) {
     const currentAdminFullName = localStorage.getItem('fullName');

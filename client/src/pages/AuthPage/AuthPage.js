@@ -1,11 +1,9 @@
 import { endpoints } from '../../api/index.js';
 
-const authForm = document.getElementById('authForm');
 const fullNameInput = document.getElementById('fullNameInput');
 const passwordInput = document.getElementById('passwordInput');
 const secretWordInput = document.getElementById('secretWordInput');
 const submitButton = document.getElementById('submitButton');
-const loadingSpinner = document.getElementById('loadingSpinner');
 
 submitButton.addEventListener('click', async function () {
     const formData = {
@@ -17,7 +15,7 @@ submitButton.addEventListener('click', async function () {
     if (formData.fullName && formData.password && formData.secretWord) {
         submitButton.disabled = true;
         const jwtToken = localStorage.getItem('token');
-
+        console.log(jwtToken, formData);
         try {
             const response = await fetch(`${endpoints.SERVER_ORIGIN_URI}${endpoints.ADMINS.ROUTE}${endpoints.ADMINS.LOGIN}`, {
                 method: 'POST',

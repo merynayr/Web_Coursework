@@ -1,5 +1,7 @@
 import { createAdminTableItemCard } from '../../components/TableItemCard/AdminTableItemCard.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
+import { endpoints } from "../../api/index.js";
+
 
 $(document).ready(function () {
     let admins = [];
@@ -21,7 +23,7 @@ $(document).ready(function () {
                 container.append(card);
             });
         } else {
-            renderNoItems('#admin-table-container', 'Админов не найдено 😔', 'adminsDataGet', true);
+            renderNoItems('#admin-table-container', 'Админов не найдено 😔', true);
         }
     };
 
@@ -59,5 +61,6 @@ $(document).ready(function () {
     };
 
     fetchAdmins();
-
+    window.fetchAdmins = fetchAdmins;
 });
+

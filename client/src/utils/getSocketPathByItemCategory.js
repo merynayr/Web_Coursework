@@ -1,4 +1,3 @@
-
 const socketPaths = {
     'flights': '/flights',
     'planes': 'isPlanesUpdate',

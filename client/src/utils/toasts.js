@@ -1,8 +1,8 @@
 icon = {
-    success:'<img src="src/assets/toasts/success.svg" alt="Success">',
-    danger: '<img src="src/assets/toasts/danger.png" alt="Error">',
-    warning: '<img src="src/assets/toasts/warning.png" alt="Warning">',
-    info: '<img src="src/assets/toasts/info.svg" alt="Info">',
+    success:'<img src="/src/assets/toasts/success.svg" alt="Success">',
+    danger: '<img src="/src/assets/toasts/danger.png" alt="Error">',
+    warning: '<img src="/src/assets/toasts/warning.png" alt="Warning">',
+    info: '<img src="/src/assets/toasts/info.svg" alt="Info">',
 };
 
 toastConfig = {

@@ -111,7 +111,7 @@ flightRouter.delete('/remove/:itemId', async (req, res) => {
     try {
         const itemId = req.params.itemId
         const removeFlight = await Flight.findOne({ flightNumber: itemId })
-        console.log(itemId);
+
         const flightPlane = await Plane.findOneAndUpdate({ 
             id: removeFlight.flightPlane 
         }, {
@@ -127,7 +127,7 @@ flightRouter.delete('/remove/:itemId', async (req, res) => {
             return res.send({ error: "Что-то пошло не так, попробуйте позже" })
         }
 
-        await Flight.findOneAndRemove({ flightNumber: itemId })
+        await Flight.findOneAndDelete({ flightNumber: itemId })
 
         return res.send({ message: `Flight ${itemId} has been successfully removed` })
     } catch (e) {

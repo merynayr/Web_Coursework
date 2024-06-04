@@ -103,6 +103,7 @@ async function createFlight(formData) {
         } else {
             toastSuccess("Новый рейс успешно создан!");
             closePopup("#FlightPopup");
+            fetchFlights();
         }
     } catch (error) {
         console.error("Error creating flight:", error);

@@ -1,7 +1,7 @@
 // EditAdminsContent.js
-import { endpoints } from "../../api";
+import { endpoints } from "../../api/index.js";
 import { closePopup } from '../Popups/Popup.js';
-
+// import { fetchAdmins } from "src/pages/AdminsPage/AdminsPage.js"
 // Функция для сохранения изменений
 export function saveChanges(formData, id) {
     const fullName = formData.fullName;
@@ -34,7 +34,7 @@ export function saveChanges(formData, id) {
             } else {
                 toastSuccess("Данные администратора успешно изменены!");
                 closePopup("#editItemPopup");
-                // socket.emit('isAdminsUpdate', { status: true });
+                fetchAdmins();
             }
         })
         .catch(error => {

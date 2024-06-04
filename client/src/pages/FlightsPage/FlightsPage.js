@@ -7,7 +7,7 @@ $(document).ready(function () {
     let flights = [];
     let unChangedFlights = [];
     let isFetching = false;
-    console.log("HI");
+
     const allLinks = document.querySelectorAll('.create-new-button');
     allLinks.forEach(link => link.style.display = 'block');
 
@@ -30,7 +30,7 @@ $(document).ready(function () {
                 container.append(card);
             });
         } else {
-            renderNoItems('#flightsContainer', 'Рейсов не найдено 😔', 'flightsDataGet', true);
+            renderNoItems('#flightsContainer', 'Рейсов не найдено 😔', true);
         }
     };
 
@@ -76,4 +76,6 @@ $(document).ready(function () {
     };
 
     fetchFlights();
+    window.fetchFlights = fetchFlights;
+
 });

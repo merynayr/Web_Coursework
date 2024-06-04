@@ -1,5 +1,6 @@
 // AdminsPage.js
 import { togglePopup, setupPopup, closePopup } from './Popup.js';
+import { endpoints } from "../../api/index.js";
 
 $(document).ready(function () {
     setupPopup("#adminPopup", "#popupCloseButtonCreate");
@@ -25,20 +26,16 @@ $(document).ready(function () {
         };
 
         createAdmin(formData, jwtToken);
-        closePopup("#adminPopup");
     });
 });
 
 import { isDataFilled } from "../../utils/isDataFilled.js";
-import axios from "axios";
-import { socket } from "../../socket.js";
 
 
 async function createAdmin(formData, jwtToken) {
     const isFormDataFilled = isDataFilled(formData);
     if (isFormDataFilled) {
         toastError("Кажется, вы что-то не указали");
-        return;
     }
 
     try {
@@ -60,6 +57,7 @@ async function createAdmin(formData, jwtToken) {
         } else {
             toastSuccess("Новый администратор успешно создан!");
             closePopup("#adminPopup");
+            fetchAdmins();
         }
     } catch (error) {
         console.error("Error creating admin:", error);

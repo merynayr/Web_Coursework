@@ -1,5 +1,6 @@
 import { createPassengerTableItemCard } from '../../components/TableItemCard/PassengerTableItemCard.js';
 import { renderNoItems } from '../../components/NoItems/NoItems.js';
+import { endpoints } from "../../api/index.js";
 
 $(document).ready(function () {
     let passengers = [];
@@ -23,7 +24,7 @@ $(document).ready(function () {
                 container.append(card);
             });
         } else {
-            renderNoItems('#passengersContainer', 'Пассажиров не найдено 😔', 'passengersDataGet', true);
+            renderNoItems('#passengersContainer', 'Пассажиров не найдено 😔', true);
         }
     };
 
@@ -65,4 +66,5 @@ $(document).ready(function () {
     };
 
     fetchPassengers();
+    window.fetchPassengers = fetchPassengers;
 });
