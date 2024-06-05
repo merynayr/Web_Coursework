@@ -1,0 +1,19 @@
+<form id="editItemForm">
+    <div class="form-group">
+        <label for="planeType">Название самолета:</label>
+        <input type="text1" id="planeType" name="planeType" placeholder="Название самолета" required>
+    </div>
+    <div class="form-group">
+        <label for="seatCount">Количество мест:</label>
+        <input type="number" id="seatCount" name="seatCount" placeholder="Количество мест" required>
+    </div>
+    <div class="form-group">
+        <label for="status">Статус самолета:</label>
+        <select id="status" name="status" required>
+            <option value="free">Свободен</option>
+            <option value="busy">Занят (в рейсе)</option>
+        </select>
+    </div>
+    <button type="submit">Сохранить изменения</button>
+</form>
+

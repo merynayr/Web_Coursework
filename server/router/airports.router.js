@@ -32,7 +32,6 @@ airportRouter.post("/create", async (req, res) => {
     try {
         const { airportName } = req.body
         
-        console.log(airportName)
         const AirportExists = await Airport.findOne({ airportName })
 
         if (AirportExists) {

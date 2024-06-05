@@ -1,6 +1,7 @@
 // AdminsPage.js
 import { togglePopup, setupPopup, closePopup } from './Popup.js';
 import { endpoints } from "../../api/index.js";
+import { isDataFilled } from "../../utils/isDataFilled.js";
 
 $(document).ready(function () {
     setupPopup("#adminPopup", "#popupCloseButtonCreate");
@@ -28,8 +29,6 @@ $(document).ready(function () {
         createAdmin(formData, jwtToken);
     });
 });
-
-import { isDataFilled } from "../../utils/isDataFilled.js";
 
 
 async function createAdmin(formData, jwtToken) {

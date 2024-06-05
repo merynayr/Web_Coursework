@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes Page</title>
+    <link rel="stylesheet" href="/src/pages/AdminsPage/AdminsPage.css">
+    <script src="/src/utils/dynamicImport.js"></script> 
+    <script defer>loadModule('/src/pages/PlanesPage/PlanesPage.js');</script>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="dashboard__container">
+            <div class="dashboard__container__header">
+                <div class="header__title">
+                    <div class="title">Самолеты</div>
+                </div>
+                <div class="search">
+                    <div class="search__input">
+                        <span class="magnifier">
+                            <img src="src/assets/search.svg">
+                        </span>
+                        <input type="text" name="search" placeholder="Поиск самолета" id="searchInput" />
+                        <span class="keybind">
+                            <kbd>enter</kbd> <span>or</span> <kbd>+</kbd>
+                        </span>
+                    </div>
+                </div>
+                <button class="create-new-button" style="width: 25%;" id="openPopupButton">Добавить самолет</button>
+            </div>
+            <div class="dashboard__container__body planes" id="planesContainer"></div>
+        </div>
+    </div>
+
+    <div id="editContainer"></div>
+    <div id="removeContainer"></div>
+    <div id="createContainer"></div>
+
+</body>
+
+</html>

@@ -1,8 +1,7 @@
 // EditAdminsContent.js
 import { endpoints } from "../../api/index.js";
 import { closePopup } from '../Popups/Popup.js';
-// import { fetchAdmins } from "src/pages/AdminsPage/AdminsPage.js"
-// Функция для сохранения изменений
+
 export function saveChanges(formData, id) {
     const fullName = formData.fullName;
     const role = formData.role;

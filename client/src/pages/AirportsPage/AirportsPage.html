@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airports Page</title>
+    <link rel="stylesheet" href="/src/pages/AdminsPage/AdminsPage.css">
+    <script src="/src/utils/dynamicImport.js"></script>
+    <script defer>loadModule('/src/pages/AirportsPage/AirportsPage.js');</script>
+</head>
+
+<body>
+    <div class="dashboard">
+        <div class="dashboard__container">
+            <div class="dashboard__container__header">
+                <div class="header__title">
+                    <div class="title">Аэропорты</div>
+                </div>
+                <div class="search">
+                    <div class="search__input">
+                        <span class="magnifier">
+                            <img src="src/assets/search.svg">
+                        </span>
+                        <input type="text" name="search" placeholder="Поиск аэропорта" id="searchInput" />
+                        <span class="keybind">
+                            <kbd>enter</kbd> <span>or</span> <kbd>+</kbd>
+                        </span>
+                    </div>
+                </div>
+                <button class="create-new-button" style="width: 25%;" id="openPopupButton">Добавить аэропорт</button>
+            </div>
+            <div class="dashboard__container__body airport" id="airportsContainer"></div>
+        </div>
+    </div>
+
+    <div id="editContainer"></div>
+    <div id="removeContainer"></div>
+    <div id="createContainer"></div>
+
+</body>
+
+</html>

@@ -41,5 +41,4 @@ function clearInputFields(popupSelector) {
     $(popupSelector).find('input[type="text1"]').val('');
     $(popupSelector).find('input[type="password"]').val('');
     $(popupSelector).find('input[type="role"]').val('');
-
 }

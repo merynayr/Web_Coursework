@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Plane</title>
+    <script src="../src/utils/toasts.js" defer></script>
+    <script src="/src/utils/dynamicImport.js"></script>
+    <script defer>loadModule('/src/components/Popups/CreatePlane.js');</script>
+</head>
+
+<body>
+    <div class="popup" id="PlanePopup">
+        <div class="popup__container">
+            <div class="popup__container__head">
+                <div class="head__title">Создание самолета</div>
+                <div class="head__close" id="popupCloseButtonCreate">&times;</div>
+            </div>
+            <div class="popup__container__body">
+                <form id="createPlaneForm">
+                    <div class="form-group">
+                        <label for="planeType">Название самолета:</label>
+                        <input type="text1" id="planeType" name="planeType" placeholder="Название самолета" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="seatCount">Вмещаемое количество мест:</label>
+                        <input type="number" id="seatCount" name="seatCount" placeholder="Количество мест" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="planeCompany">Название компании:</label>
+                        <input type="text1" id="planeCompany" name="planeCompany" placeholder="Название компании"
+                            required>
+                    </div>
+                    <button type="submit">Добавить самолет</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

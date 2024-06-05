@@ -49,6 +49,10 @@ $(document).ready(function () {
                     fetchFlights();
                 } else if (itemCategory == 'passengers') {
                     fetchPassengers();
+                } else if (itemCategory == 'planes') {
+                    fetchPlanes();
+                } else if (itemCategory == 'airports') {
+                    fetchAirports();
                 }
             }
         } catch (error) {

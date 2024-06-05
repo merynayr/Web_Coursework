@@ -1,18 +1,16 @@
 import { togglePopup, setupPopup } from './Popup.js';
 import { saveChanges as saveAdminChanges } from "../EditPopupContent/EditAdminsContent.js";
 import { saveChanges as saveFlightChanges } from "../EditPopupContent/EditFlightsContent.js";
-// import { saveChanges as saveAirportChanges } from "../EditPopupContent/EditAirportsContent.js";
-// import { saveChanges as savePassengerChanges } from "../EditPopupContent/EditPassengersContent.js";
-// import { saveChanges as savePlaneChanges } from "../EditPopupContent/EditPlanesContent.js";
+import { saveChanges as savePlaneChanges } from "../EditPopupContent/EditPlanesContent.js";
+import { saveChanges as saveAirportChanges } from "../EditPopupContent/EditAirportsContent.js"; // Добавлен импорт функции для сохранения изменений аэропортов
 
 $(document).ready(function () {
     setupPopup("#editItemPopup", "#popupCloseButtonEdit");
 
     let currentData = null;
 
-    // Функция для загрузки контента редактирования
     function loadEditContent(category, data) {
-        currentData = data; // Сохраняем текущие данные
+        currentData = data;
 
         const categoryMap = {
             'admins': {
@@ -33,8 +31,23 @@ $(document).ready(function () {
                     formData.lastFlightPlane = data.lastFlightPlane;
                     formData._id = data._id;
                 }
+            },
+            'planes': {
+                template: `EditPlanesContent.html`,
+                idProperty: 'id',
+                saveFunction: savePlaneChanges,
+                prepareFormData: function (formData, data) {
+                    formData.id = data.id;
+                }
+            },
+            'airports': { // Добавлен объект для обработки аэропортов
+                template: `EditAirportsContent.html`, // Файл шаблона для аэропортов
+                idProperty: 'airportId', // Свойство идентификатора аэропорта
+                saveFunction: saveAirportChanges, // Функция сохранения изменений для аэропортов
+                prepareFormData: function (formData, data) { // Функция подготовки данных формы для отправки
+                    formData.airportId = data.airportId;
+                }
             }
-            // Добавьте конфигурации для других категорий
         };
 
         const categoryConfig = categoryMap[category];
@@ -57,11 +70,19 @@ $(document).ready(function () {
                     $("#flightStatus").val(data.flightStatus);
                     $("#gate").val(data.gate);
                     break;
-                // Добавьте обработку для других категорий
+                case 'planes':
+                    $("#planeType").val(data.planeType);
+                    $("#seatCount").val(data.seatCount);
+                    const status = data.status === 'free' ? 'Свободен' : 'Занят (в рейсе)';
+                    $("#status").val(status);
+                    break;
+                case 'airports': // Добавлен case для обработки аэропортов
+                    $("#editAirportName").val(data.airportName);
+                    $("#editAirportPlace").val(data.airportPlace);
+                    break;
             }
         });
 
-        // Обработчик отправки формы редактирования
         $(document).on('submit', '#editItemForm', function (e) {
             e.preventDefault();
             const formData = {};
